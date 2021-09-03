@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model tweet_child {
+  id           Int            @id @default(autoincrement())
+  id_parent    Int
+  tweet        String         @db.VarChar(140)
+  tweet_parent tweet_parent   @relation(fields: [id_parent], references: [id])
+  tweet_photos tweet_photos[]
+
+  @@index([id_parent], name: "fk_parent_child")
+}
+
+model tweet_parent {
+  id           Int            @id @default(autoincrement())
+  tweet        String         @db.VarChar(140)
+  tweet_child  tweet_child[]
+  tweet_photos tweet_photos[]
+}
+
+model tweet_photos {
+  id              Int          @id @default(autoincrement())
+  id_tweet_parent Int
+  id_tweet_child  Int
+  images          String?      @db.VarChar(255)
+  tweet_child     tweet_child  @relation(fields: [id_tweet_child], references: [id])
+  tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
+
+  @@index([id_tweet_child], name: "fk_tweet_child")
+  @@index([id_tweet_parent], name: "fk_tweet_parent")
+}
