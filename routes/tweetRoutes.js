@@ -6,7 +6,8 @@ const {
 
 const router = Router();
 
-router.get('/', tweet_create_get);
+router.get('/', (req, res) => res.send('work'));
+router.get('/create-tweet', tweet_create_get);
 router.post('/create-tweet', tweet_create_post);
 
 module.exports = router;
