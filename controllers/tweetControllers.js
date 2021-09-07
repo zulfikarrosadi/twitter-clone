@@ -19,7 +19,7 @@ const tweet_create_post = async (req, res) => {
       });
 
       if (Array.isArray(tweets)) {
-        let tweetChild = await prisma.tweet_child.createMany({
+        await prisma.tweet_child.createMany({
           data: tweets.map((tweetChild) => ({
             id_parent: tweetParent.id,
             tweet: tweetChild,
@@ -28,7 +28,7 @@ const tweet_create_post = async (req, res) => {
       }
 
       if (req.files) {
-        const tweetPhotos = await prisma.tweet_photos.createMany({
+        await prisma.tweet_photos.createMany({
           data: req.files.map((file) => ({
             id_tweet_parent: tweetParent.id,
             images: file.filename,
