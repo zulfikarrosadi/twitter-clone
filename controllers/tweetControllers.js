@@ -13,15 +13,13 @@ const tweet_create_post = async (req, res) => {
   upload(req, res, async (error) => {
     try {
       if (error) throw error;
-
       const { tweets } = req.body;
       const tweetParent = await prisma.tweet_parent.create({
         data: { tweet: tweets },
       });
 
-      let tweetChild;
       if (Array.isArray(tweets)) {
-        tweetChild = await prisma.tweet_child.createMany({
+        let tweetChild = await prisma.tweet_child.createMany({
           data: tweets.map((tweetChild) => ({
             id_parent: tweetParent.id,
             tweet: tweetChild,
@@ -29,9 +27,12 @@ const tweet_create_post = async (req, res) => {
         });
       }
 
-      if (req.file) {
-        const tweetPhotos = await prisma.tweet_photos.create({
-          data: { id_tweet_parent: tweetParent.id, images: req.file.filename },
+      if (req.files) {
+        const tweetPhotos = await prisma.tweet_photos.createMany({
+          data: req.files.map((file) => ({
+            id_tweet_parent: tweetParent.id,
+            images: file.filename,
+          })),
         });
       }
 
