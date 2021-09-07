@@ -23,17 +23,21 @@
 
     <script>
       const form = document.querySelector('form');
+      const photo = document.querySelector('#tweet_photo');
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        const formData = new FormData();
 
-        try {
-          const response = await fetch('create-tweet', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tweets: form.tweet.value }),
-          });
-        } catch (error) {}
+        formData.append('tweets', form.tweet.value);
+        formData.append('tweetPhoto', photo.files[0]);
+
+        const response = await fetch('/create-tweet', {
+          method: 'post',
+          body: formData,
+        });
+        const result = await response.json();
+        console.log(result);
       });
     </script>
   </body>
