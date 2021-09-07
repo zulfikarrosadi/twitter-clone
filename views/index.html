@@ -15,7 +15,7 @@
         </li>
         <li>
           <label for="tweet_photo">tweet photo</label>
-          <input type="file" name="tweetPhoto" id="tweet_photo" />
+          <input type="file" name="tweetPhoto" id="tweet_photo" multiple />
         </li>
         <li><button class="submit">Submit</button></li>
       </ul>
@@ -29,8 +29,10 @@
         e.preventDefault();
         const formData = new FormData();
 
+        for (let i = 0; i < photo.files.length; i++) {
+          formData.append('tweetPhoto', photo.files[i]);
+        }
         formData.append('tweets', form.tweet.value);
-        formData.append('tweetPhoto', photo.files[0]);
 
         const response = await fetch('/create-tweet', {
           method: 'post',
