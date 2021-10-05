@@ -18,7 +18,7 @@ model tweet_child {
 
 model tweet_parent {
   id           Int            @id @default(autoincrement())
-  tweet        String         @db.VarChar(140)
+  tweet        String?        @db.VarChar(140)
   tweet_child  tweet_child[]
   tweet_photos tweet_photos[]
 }
