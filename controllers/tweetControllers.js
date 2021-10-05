@@ -13,8 +13,9 @@ const tweet_create_post = async (req, res) => {
   upload(req, res, async (error) => {
     try {
       if (error) throw error;
-      const { tweets } = req.body;
-      const tweetParent = await prisma.tweet_parent.create({
+      let tweets = req.body.tweets || null;
+
+      let tweetParent = await prisma.tweet_parent.create({
         data: { tweet: tweets },
       });
 
@@ -38,7 +39,6 @@ const tweet_create_post = async (req, res) => {
 
       return res.status(201).json({
         message: 'tweet success created',
-        idTweetParent: tweetParent.id,
       });
     } catch (error) {
       console.log(error);
