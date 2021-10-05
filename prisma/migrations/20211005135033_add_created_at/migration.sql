@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `tweet_parent` ADD COLUMN `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);
