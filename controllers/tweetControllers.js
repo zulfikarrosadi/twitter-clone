@@ -5,17 +5,17 @@ const upload = require('../middlewares/upload');
 
 const prisma = new PrismaClient();
 
-const tweet_create_get = (req, res) => {
-  return res.sendFile(path.join(__dirname, '../views/index.html'));
-};
+const getTweetPage = (req, res) => (
+  res.sendFile(path.join(__dirname, '../views/index.html'))
+);
 
-const tweet_create_post = async (req, res) => {
+const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
     try {
       if (error) throw error;
-      let tweets = req.body.tweets || null;
+      const tweets = req.body.tweets || null;
 
-      let tweetParent = await prisma.tweet_parent.create({
+      const tweetParent = await prisma.tweet_parent.create({
         data: { tweet: tweets },
       });
 
@@ -40,8 +40,8 @@ const tweet_create_post = async (req, res) => {
       return res.status(201).json({
         message: 'tweet success created',
       });
-    } catch (error) {
-      console.log(error);
+    } catch (errors) {
+      console.log(errors);
       return res.status(400).json({
         message: 'tweet failed to create',
       });
@@ -50,6 +50,6 @@ const tweet_create_post = async (req, res) => {
 };
 
 module.exports = {
-  tweet_create_get,
-  tweet_create_post,
+  getTweetPage,
+  addTweet,
 };
