@@ -101,9 +101,32 @@ const getInfiniteTweets = async (req, res) => {
   }
 };
 
+const getSingleTweet = async (req, res) => {
+  try {
+    const tweet = await prisma.tweet_parent.findUnique({
+      where: { id: parseInt(req.params.id, 10) },
+      include: {
+        tweet_child: {
+          select: { id: true, tweet: true },
+        },
+        tweet_photos: {
+          select: { images: true },
+        },
+      },
+    });
+
+    return res.status(200).json(tweet);
+  } catch (error) {
+    return res.status(404).json({
+      message: 'Tweet not found',
+    });
+  }
+};
+
 module.exports = {
   getTweetPage,
   addTweet,
   getTweets,
   getInfiniteTweets,
+  getSingleTweet,
 };
