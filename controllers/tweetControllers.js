@@ -49,7 +49,61 @@ const addTweet = async (req, res) => {
   });
 };
 
+const getTweets = async (req, res) => {
+  try {
+    const tweets = await prisma.tweet_parent.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      include: {
+        tweet_child: {
+          select: { id: true, tweet: true },
+        },
+        tweet_photos: {
+          select: { images: true },
+        },
+      },
+    });
+
+    return res.json({ cursor: tweets[tweets.length - 1].id, tweets });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: 'tweet failed to fetch',
+    });
+  }
+};
+
+const getInfiniteTweets = async (req, res) => {
+  try {
+    let cursor = parseInt(req.params.cursor, 10);
+    const tweets = await prisma.tweet_parent.findMany({
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      cursor: { id: cursor },
+      skip: 1,
+      include: {
+        tweet_child: {
+          select: { id: true, tweet: true },
+        },
+        tweet_photos: {
+          select: { images: true },
+        },
+      },
+    });
+
+    cursor = tweets[tweets.length - 1].id;
+    return res.status(200).json({ cursor, tweets });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: 'There is no more tweets to load',
+    });
+  }
+};
+
 module.exports = {
   getTweetPage,
   addTweet,
+  getTweets,
+  getInfiniteTweets,
 };
