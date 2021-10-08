@@ -4,14 +4,16 @@ const {
   addTweet,
   getTweets,
   getInfiniteTweets,
+  getSingleTweet,
 } = require('../controllers/tweetControllers');
 
 const router = Router();
 
 router.get('/', (req, res) => res.send('work'));
-router.get('/create-tweet', getTweetPage);
-router.post('/create-tweet', addTweet);
 router.get('/tweets', getTweets);
 router.get('/tweets/infinite/:cursor', getInfiniteTweets);
+router.get('/tweet/:id', getSingleTweet);
+router.get('/create-tweet', getTweetPage);
+router.post('/create-tweet', addTweet);
 
 module.exports = router;
