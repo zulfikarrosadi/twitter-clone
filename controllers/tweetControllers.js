@@ -39,16 +39,13 @@ const addTweet = async (req, res) => {
       if (error) throw error;
 
       const tweets = req.body.tweets || null;
-      let tweetParent;
+      const createOptions = { data: { tweet: tweets } };
+      if (Array.isArray(tweets)) {
+        createOptions.data.tweet = tweets.shift();
+      }
+      const tweetParent = await prisma.tweet_parent.create(createOptions);
 
-      if (!Array.isArray(tweets)) {
-        tweetParent = await prisma.tweet_parent.create({
-          data: { tweet: tweets },
-        });
-      } else {
-        tweetParent = await prisma.tweet_parent.create({
-          data: { tweet: tweets.shift() },
-        });
+      if (Array.isArray(tweets)) {
         await prisma.tweet_child.createMany({
           data: tweets.map((tweetChild) => ({
             id_tweet_parent: tweetParent.id,
