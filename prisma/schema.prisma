@@ -8,12 +8,12 @@ datasource db {
 }
 
 model tweet_child {
-  id           Int          @id @default(autoincrement())
-  id_parent    Int
-  tweet        String       @db.VarChar(140)
-  tweet_parent tweet_parent @relation(fields: [id_parent], references: [id])
+  id              Int          @id @default(autoincrement())
+  tweet           String       @db.VarChar(140)
+  id_tweet_parent Int
+  tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
-  @@index([id_parent], name: "fk_parent_child")
+  @@index([id_tweet_parent], name: "fk_parent_child")
 }
 
 model tweet_parent {
