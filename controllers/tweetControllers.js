@@ -9,30 +9,6 @@ const getTweetPage = (req, res) => (
   res.sendFile(path.join(__dirname, '../views/index.html'))
 );
 
-/**
-  const tweetParent = await prisma.tweet_parent.create({
-      data: { tweet: tweets },
-    });
-
-    if (Array.isArray(tweets)) {
-      await prisma.tweet_child.createMany({
-        data: tweets.map((tweetChild) => ({
-          id_parent: tweetParent.id,
-          tweet: tweetChild,
-        })),
-      });
-    }
-
-    if (req.files) {
-      await prisma.tweet_photos.createMany({
-        data: req.files.map((file) => ({
-          id_tweet_parent: tweetParent.id,
-          images: file.filename,
-        })),
-      });
-    }
- */
-
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
     try {
