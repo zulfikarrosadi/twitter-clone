@@ -124,10 +124,34 @@ const getSingleTweet = async (req, res) => {
   }
 };
 
+const deleteTweet = async (req, res) => {
+  try {
+    const id = parseInt(req.body.id, 10);
+    await prisma.tweet_parent.update({
+      where: { id },
+      data: {
+        tweet_child: { deleteMany: { id_tweet_parent: id } },
+        tweet_photos: { deleteMany: { id_tweet_parent: id } },
+      },
+    });
+    await prisma.tweet_parent.delete({
+      where: { id },
+    });
+    return res.status(200).json({
+      message: 'tweet successed to deleted',
+    });
+  } catch (error) {
+    return res.status(400).json({
+      message: 'tweet failed to delete',
+    });
+  }
+};
+
 module.exports = {
   getTweetPage,
   addTweet,
   getTweets,
   getInfiniteTweets,
   getSingleTweet,
+  deleteTweet,
 };
