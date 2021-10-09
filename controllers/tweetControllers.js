@@ -9,20 +9,49 @@ const getTweetPage = (req, res) => (
   res.sendFile(path.join(__dirname, '../views/index.html'))
 );
 
+/**
+  const tweetParent = await prisma.tweet_parent.create({
+      data: { tweet: tweets },
+    });
+
+    if (Array.isArray(tweets)) {
+      await prisma.tweet_child.createMany({
+        data: tweets.map((tweetChild) => ({
+          id_parent: tweetParent.id,
+          tweet: tweetChild,
+        })),
+      });
+    }
+
+    if (req.files) {
+      await prisma.tweet_photos.createMany({
+        data: req.files.map((file) => ({
+          id_tweet_parent: tweetParent.id,
+          images: file.filename,
+        })),
+      });
+    }
+ */
+
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
     try {
       if (error) throw error;
+
       const tweets = req.body.tweets || null;
+      let tweetParent;
 
-      const tweetParent = await prisma.tweet_parent.create({
-        data: { tweet: tweets },
-      });
-
-      if (Array.isArray(tweets)) {
+      if (!Array.isArray(tweets)) {
+        tweetParent = await prisma.tweet_parent.create({
+          data: { tweet: tweets },
+        });
+      } else {
+        tweetParent = await prisma.tweet_parent.create({
+          data: { tweet: tweets.shift() },
+        });
         await prisma.tweet_child.createMany({
           data: tweets.map((tweetChild) => ({
-            id_parent: tweetParent.id,
+            id_tweet_parent: tweetParent.id,
             tweet: tweetChild,
           })),
         });
