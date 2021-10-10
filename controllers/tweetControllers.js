@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const { v4: uuid } = require('uuid');
 const path = require('path');
 
 const upload = require('../middlewares/upload');
@@ -27,31 +28,31 @@ const addTweet = async (req, res) => {
     try {
       if (error) throw error;
 
-      const tweets = req.body.tweets || null;
-      const createOptions = { data: { tweet: tweets } };
-      if (Array.isArray(tweets)) {
-        createOptions.data.tweet = tweets.shift();
-      }
-      const tweetParent = await prisma.tweet_parent.create(createOptions);
+      const id = uuid();
+      const { tweets = null } = req.body;
+      const createOptions = { id, tweet: tweets };
 
       if (Array.isArray(tweets)) {
-        await prisma.tweet_child.createMany({
-          data: tweets.map((tweetChild) => ({
-            id_tweet_parent: tweetParent.id,
-            tweet: tweetChild,
-          })),
-        });
+        createOptions.tweet = tweets.shift();
+        createOptions.tweet_child = {
+          createMany: {
+            data: tweets.map((tweet) => ({
+              tweet,
+            })),
+          },
+        };
       }
-
       if (req.files) {
-        await prisma.tweet_photos.createMany({
-          data: req.files.map((file) => ({
-            id_tweet_parent: tweetParent.id,
-            images: file.filename,
-          })),
-        });
+        createOptions.tweet_photos = {
+          createMany: {
+            data: req.files.map((file) => ({
+              images: file.filename,
+            })),
+          },
+        };
       }
 
+      await prisma.tweet_parent.create({ data: createOptions });
       return res.status(201).json({
         message: 'tweet success created',
       });
