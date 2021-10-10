@@ -106,7 +106,7 @@ const getInfiniteTweets = async (req, res) => {
 const getSingleTweet = async (req, res) => {
   try {
     const tweet = await prisma.tweet_parent.findUnique({
-      where: { id: parseInt(req.params.id, 10) },
+      where: { id: req.params.id },
       include: {
         tweet_child: {
           select: { id: true, tweet: true },
