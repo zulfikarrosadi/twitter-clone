@@ -62,8 +62,9 @@ const addTweet = async (req, res) => {
 
 const getTweets = async (req, res) => {
   try {
-    if (Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor')
-        && Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
+    if (
+      Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor')
+      && Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
     ) {
       delete getTweetOptions.cursor;
       delete getTweetOptions.skip;
