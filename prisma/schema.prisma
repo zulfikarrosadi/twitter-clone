@@ -7,17 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model tweet_child {
-  id              Int          @id @default(autoincrement())
-  tweet           String       @db.VarChar(140)
-  id_tweet_parent Int
-  tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
-
-  @@index([id_tweet_parent], name: "fk_parent_child")
-}
-
 model tweet_parent {
-  id           Int            @id @default(autoincrement())
+  id           String         @id @db.VarChar(40)
   tweet        String?        @db.VarChar(140)
   createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(0)
   updatedAt    DateTime?      @default(now()) @map("updated_at") @db.DateTime(0)
@@ -25,9 +16,18 @@ model tweet_parent {
   tweet_photos tweet_photos[]
 }
 
+model tweet_child {
+  id              Int          @id @default(autoincrement())
+  tweet           String       @db.VarChar(140)
+  id_tweet_parent String       @db.VarChar(40)
+  tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
+
+  @@index([id_tweet_parent], name: "fk_parent_child")
+}
+
 model tweet_photos {
   id              Int          @id @default(autoincrement())
-  id_tweet_parent Int
+  id_tweet_parent String       @db.VarChar(40)
   images          String?      @db.VarChar(255)
   tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
