@@ -123,7 +123,7 @@ const getSingleTweet = async (req, res) => {
 
 const deleteTweet = async (req, res) => {
   try {
-    const id = parseInt(req.body.id, 10);
+    const { id } = req.body;
     await prisma.tweet_parent.update({
       where: { id },
       data: {
