@@ -1,6 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
 const { v4: uuid } = require('uuid');
-const path = require('path');
 
 const upload = require('../middlewares/upload');
 
@@ -18,10 +17,6 @@ const getTweetOptions = {
     },
   },
 };
-
-const getTweetPage = (req, res) => (
-  res.sendFile(path.join(__dirname, '../views/index.html'))
-);
 
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
@@ -149,7 +144,6 @@ const deleteTweet = async (req, res) => {
 };
 
 module.exports = {
-  getTweetPage,
   addTweet,
   getTweets,
   getInfiniteTweets,
