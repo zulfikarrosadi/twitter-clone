@@ -14,7 +14,7 @@ router.get('/tweets', getTweets);
 router.get('/tweets/infinite/:cursor', getInfiniteTweets);
 router.get('/tweet/:id', getSingleTweet);
 
-router.post('/create-tweet', addTweet);
+router.post('/tweet', addTweet);
 router.delete('/tweet', deleteTweet);
 router.patch('/tweet/:idParent/', updateTweet);
 router.patch('/tweet/:idParent/:idChild', updateTweet);
