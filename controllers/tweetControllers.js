@@ -144,10 +144,44 @@ const deleteTweet = async (req, res) => {
   }
 };
 
+const updateTweet = async (req, res) => {
+  try {
+    const { idParent, idChild = null } = req.params;
+    const { tweet } = req.body;
+
+    const updateOptions = {
+      where: { id: idParent },
+      data: { tweet },
+    };
+
+    if (idChild) {
+      updateOptions.data = {
+        tweet_child: {
+          update: {
+            where: { id: parseInt(idChild, 10) },
+            data: { tweet },
+          },
+        },
+      };
+    }
+
+    await prisma.tweet_parent.update(updateOptions);
+    return res.status(200).json({
+      message: 'tweet successed to update',
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({
+      message: 'tweet failed to update',
+    });
+  }
+};
+
 module.exports = {
   addTweet,
   getTweets,
   getInfiniteTweets,
   getSingleTweet,
   deleteTweet,
+  updateTweet,
 };
