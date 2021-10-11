@@ -5,6 +5,7 @@ const {
   getInfiniteTweets,
   getSingleTweet,
   deleteTweet,
+  updateTweet,
 } = require('../controllers/tweetControllers');
 
 const router = Router();
@@ -16,5 +17,7 @@ router.get('/tweet/:id', getSingleTweet);
 
 router.post('/create-tweet', addTweet);
 router.delete('/tweet', deleteTweet);
+router.patch('/tweet/:idParent/', updateTweet);
+router.patch('/tweet/:idParent/:idChild', updateTweet);
 
 module.exports = router;
