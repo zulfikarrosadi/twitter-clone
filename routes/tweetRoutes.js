@@ -10,7 +10,6 @@ const {
 
 const router = Router();
 
-router.get('/', (req, res) => res.send('work'));
 router.get('/tweets', getTweets);
 router.get('/tweets/infinite/:cursor', getInfiniteTweets);
 router.get('/tweet/:id', getSingleTweet);
