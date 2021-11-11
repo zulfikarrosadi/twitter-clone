@@ -10,13 +10,13 @@ const {
 
 const router = Router();
 
-router.get('/tweets', getTweets);
-router.get('/tweets/infinite/:cursor', getInfiniteTweets);
-router.get('/tweet/:id', getSingleTweet);
+router.get('/', getTweets);
+router.get('/infinite/:cursor', getInfiniteTweets);
+router.get('/:id', getSingleTweet);
 
-router.post('/tweet', addTweet);
-router.delete('/tweet', deleteTweet);
-router.patch('/tweet/:idParent/', updateTweet);
-router.patch('/tweet/:idParent/:idChild', updateTweet);
+router.post('/', addTweet);
+router.delete('/', deleteTweet);
+router.patch('/:idParent/', updateTweet);
+router.patch('/:idParent/:idChild', updateTweet);
 
 module.exports = router;
