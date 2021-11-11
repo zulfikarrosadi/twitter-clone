@@ -1,5 +1,4 @@
 const { PrismaClient } = require('@prisma/client');
-const { v4: uuid } = require('uuid');
 
 const upload = require('../middlewares/upload');
 
@@ -23,9 +22,8 @@ const addTweet = async (req, res) => {
     try {
       if (error) throw error;
 
-      const id = uuid();
       const { tweets = null } = req.body;
-      const createOptions = { id, tweet: tweets };
+      const createOptions = { tweet: tweets };
 
       if (Array.isArray(tweets)) {
         createOptions.tweet = tweets.shift();
