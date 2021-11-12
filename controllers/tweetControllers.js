@@ -99,8 +99,10 @@ const getInfiniteTweets = async (req, res) => {
 
 const getSingleTweet = async (req, res) => {
   try {
+    const id = parseInt(req.params.id, 10);
+
     const tweet = await prisma.tweet_parent.findUnique({
-      where: { id: req.params.id },
+      where: { id },
       include: {
         tweet_child: {
           select: { id: true, tweet: true },
@@ -121,8 +123,8 @@ const getSingleTweet = async (req, res) => {
 
 const deleteTweet = async (req, res) => {
   try {
-    let { idParent: id } = req.params;
-    id = parseInt(id, 10);
+    const id = parseInt(req.params.id, 10);
+
     await prisma.tweet_parent.update({
       where: { id },
       data: {
@@ -145,11 +147,14 @@ const deleteTweet = async (req, res) => {
 
 const updateTweet = async (req, res) => {
   try {
-    const { idParent, idChild = null } = req.params;
+    let { idParent: id, idChild = null } = req.params;
     const { tweet } = req.body;
 
+    id = parseInt(id, 10);
+    idChild = parseInt(idChild, 10);
+
     const updateOptions = {
-      where: { id: idParent },
+      where: { id },
       data: { tweet },
     };
 
@@ -157,7 +162,7 @@ const updateTweet = async (req, res) => {
       updateOptions.data = {
         tweet_child: {
           update: {
-            where: { id: parseInt(idChild, 10) },
+            where: { id: idChild },
             data: { tweet },
           },
         },
