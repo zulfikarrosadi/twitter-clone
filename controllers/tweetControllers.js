@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
-
+const { unlink } = require('fs');
+const { resolve, join } = require('path');
 const upload = require('../middlewares/upload');
 
 const prisma = new PrismaClient();
@@ -61,8 +62,8 @@ const addTweet = async (req, res) => {
 const getTweets = async (req, res) => {
   try {
     if (
-      Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor')
-      && Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
+      Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor') &&
+      Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
     ) {
       delete getTweetOptions.cursor;
       delete getTweetOptions.skip;
@@ -120,17 +121,26 @@ const getSingleTweet = async (req, res) => {
     });
   }
 };
-
+/*
+  BUGS: Deleting file when tweet is deleted is still not working,
+  because the root directory is not from controller, but is from app.js, or idk :D
+*/
 const deleteTweet = async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.idParent, 10);
 
-    await prisma.tweet_parent.update({
+    const foo = await prisma.tweet_parent.update({
       where: { id },
+      include: { tweet_photos: true, tweet_child: true },
       data: {
         tweet_child: { deleteMany: { id_tweet_parent: id } },
         tweet_photos: { deleteMany: { id_tweet_parent: id } },
       },
+    });
+    console.log(foo);
+    unlink(join(__dirname, '../public/uploads/images/52278811.jpg'), (err) => {
+      if (err) throw err;
+      console.log('file removed');
     });
     await prisma.tweet_parent.delete({
       where: { id },
@@ -139,6 +149,7 @@ const deleteTweet = async (req, res) => {
       message: 'tweet successed to deleted',
     });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       message: 'tweet failed to delete',
     });
