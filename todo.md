@@ -31,8 +31,10 @@ bug:
   3. DONE
      infinite scroll is break, because now id is not a numeric value
      its uuid
-  4. we actually can delete photos, but we can get the filename
-  5. cannot uploaded multiple file multer
+  10. we can get the filename, we can deleted the photos, but when it comes
+     multiple photos, it bug
+  5. DONE
+    cannot uploaded multiple file multer
 
 warning:
   1. we still do double checking when adding tweets                         DONE
