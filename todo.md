@@ -18,6 +18,9 @@ features:
   14. use /tweets for every single tweets endpoint                          DONE
   15. like a real twitter, split the first 140 character for 
       the parent tweet and, the rest is for the tweet child                                                   UNDER CONSTRUCTION
+  16. add prettierrc to configure trailing coma, operator
+  17. create custom error instance and fix error feedback
+  18. create schema for success feedback
 
 bug:
   1. DONE 
