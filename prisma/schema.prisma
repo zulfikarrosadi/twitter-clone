@@ -10,8 +10,8 @@ datasource db {
 model tweet_parent {
   id           Int            @id @default(autoincrement())
   tweet        String?        @db.VarChar(140)
-  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt    DateTime?      @default(now()) @map("updated_at") @db.Timestamp(0)
+  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt    DateTime?      @updatedAt @map("updated_at")
   tweet_child  tweet_child[]
   tweet_photos tweet_photos[]
 }
