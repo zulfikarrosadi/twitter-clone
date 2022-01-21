@@ -1,6 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const { unlink } = require('fs');
-const { resolve, join } = require('path');
+const { join } = require('path');
 const upload = require('../middlewares/upload');
 
 const prisma = new PrismaClient();
@@ -70,11 +70,13 @@ const getTweets = async (req, res) => {
     }
 
     const tweets = await prisma.tweet_parent.findMany(getTweetOptions);
+    if (!tweets.length) throw new Error('No tweet found');
+
     return res.json({ cursor: tweets[tweets.length - 1].id, tweets });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
-      message: 'tweet failed to fetch',
+      message: `tweet failed to fetch, ${error.message}`,
     });
   }
 };
