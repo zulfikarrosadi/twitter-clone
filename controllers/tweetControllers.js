@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, Prisma } = require('@prisma/client');
 const { unlink } = require('fs');
 const { join } = require('path');
 const upload = require('../middlewares/upload');
@@ -124,25 +124,32 @@ const getSingleTweet = async (req, res) => {
   }
 };
 /*
-  BUGS: Deleting file when tweet is deleted is still not working,
-  because the root directory is not from controller, but is from app.js, or idk :D
+  BUGS: Succesully deleting single file, but bug in deleting multiple file
 */
 const deleteTweet = async (req, res) => {
   try {
     const id = parseInt(req.params.idParent, 10);
-
-    const foo = await prisma.tweet_parent.update({
+    const result = await prisma.$queryRaw(
+      Prisma.sql`SELECT tp.images AS tweet_photos FROM tweet_parent AS tps
+      JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`
+    );
+    if (result.length) {
+      console.log('masuk if');
+      const tweetPhotos = result.map((item) => item.tweet_photos);
+      unlink(
+        join(__dirname, `../public/uploads/images/${tweetPhotos}`),
+        (err) => {
+          if (err) throw err;
+          console.log('file removed');
+        }
+      );
+    }
+    await prisma.tweet_parent.update({
       where: { id },
-      include: { tweet_photos: true, tweet_child: true },
       data: {
         tweet_child: { deleteMany: { id_tweet_parent: id } },
         tweet_photos: { deleteMany: { id_tweet_parent: id } },
       },
-    });
-    console.log(foo);
-    unlink(join(__dirname, '../public/uploads/images/52278811.jpg'), (err) => {
-      if (err) throw err;
-      console.log('file removed');
     });
     await prisma.tweet_parent.delete({
       where: { id },
