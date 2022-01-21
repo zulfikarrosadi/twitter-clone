@@ -1,3 +1,6 @@
+Good Read:
+  1. Prisma$use (middleware on hook)
+
 features:
   1. user can upload just only pictures without any caption                 DONE
   2. add tweet validation                                            UNNECESSARY
