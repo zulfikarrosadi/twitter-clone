@@ -18,10 +18,13 @@ features:
 
 bug:
   1. DONE 
-    when user not providing any caption, then prisma wont insert any data to database and it make tweetParent.id is undefined
+    when user not providing any caption, then prisma wont insert any data to
+    database and it make tweetParent.id is undefined
   2. DONE
-     1) if we adding tweets with tweet child, then tweet_parent query will not work because it only receive string, not array
-     2) when adding tweets with tweet child, the fir                    st tweets in array that should belong to tweet_parent, will be added to tweet_child too
+     1) if we adding tweets with tweet child, then tweet_parent query will not
+     work because it only receive string, not array
+     2) when adding tweets with tweet child, the first tweets in array that 
+     should belong to tweet_parent, will be added to tweet_child too
   3. DONE
      infinite scroll is break, because now id is not a numeric value
      its uuid
@@ -32,9 +35,9 @@ warning:
   2. sending to many request to insert data                                 DONE
   3. there is no error handler if user not providing the requirements
   4. considering using nanoid instead uuid
-  5. according to the best practice restful api, we should hiding the complexity from client,
-     but when client is creating new tweets, we always expected an array, we should not do that
-     instead, we will make that array in this server.
+  5. according to the best practice restful api, we should hiding the complexity
+     from client, but when client is creating new tweets, we always expected an
+     array, we should not do that instead, we will make that array in this server.
 
 might help:
   1. read how infinite scroll work
@@ -48,7 +51,8 @@ features details:
   7. its just get like around 10 tweets per load
 
 features alternatives:
-  7. using prisma pagination, offset will send through url params, but it will break the performance
+  7. using prisma pagination, offset will send through url params, but it will
+  break the performance
 
 how to fix:
   1. BUG 1 DONE
@@ -64,4 +68,6 @@ how to fix:
   3. BUG 3 DONE
     1) creating 2 id columns                                          UNECESSARY
     2) read about nested create prisma, createMany etc
-    3) its solved because actually we dont need uui for this operation, prisma will handle the relation value (id parent) when using nested create. recommend read it again
+    3) its solved because actually we dont need uui for this operation,
+    prisma will handle the relation value (id parent) when using nested create.
+    recommend read it again
