@@ -122,9 +122,7 @@ const getSingleTweet = async (req, res) => {
     });
   }
 };
-/*
-  BUGS: Succesully deleting single file, but bug in deleting multiple file
-*/
+
 const deleteTweet = async (req, res) => {
   try {
     const id = parseInt(req.params.idParent, 10);
