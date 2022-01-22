@@ -1,6 +1,6 @@
 const { PrismaClient, Prisma } = require('@prisma/client');
 const upload = require('../middlewares/upload');
-const deleteMultipleFile = require('../utils/deleteMultipleFiles');
+const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
 const prisma = new PrismaClient();
 
@@ -136,7 +136,7 @@ const deleteTweet = async (req, res) => {
 
     if (photoFileNames.length) {
       const fileName = photoFileNames.map((item) => item.tweet_photos);
-      deleteMultipleFile(fileName);
+      deleteMultipleFiles(fileName);
     }
 
     await prisma.tweet_parent.update({
