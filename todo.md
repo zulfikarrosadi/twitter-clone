@@ -11,7 +11,7 @@ features:
   7. get all my tweets in infinite scroll                                   DONE
   8. delete my tweets                                                       DONE
   9. updates my tweets                                        UNDER CONSTRUCTION
-  10. delete photos when tweets is deleted                                   BUG
+  10. delete photos when tweets is deleted                                  DONE
   11. delete single tweet idChild                             UNDER CONSTRUCTION
   12. use url query instead url parameter in update routes           UNNECESSARY
   13. when delete tweet, change id from request body to url param           DONE
@@ -34,7 +34,8 @@ bug:
   3. DONE
      infinite scroll is break, because now id is not a numeric value
      its uuid
-  10. we can get the filename, we can deleted the photos, but when it comes
+  10. DONE 
+     we can get the filename, we can deleted the photos, but when it comes
      multiple photos, it bug
   5. DONE
     cannot uploaded multiple file multer
