@@ -1,5 +1,6 @@
 const { PrismaClient, Prisma } = require('@prisma/client');
 const upload = require('../middlewares/upload');
+const { getSingleTweetById } = require('../services/tweetService');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
 const prisma = new PrismaClient();
@@ -102,18 +103,7 @@ const getInfiniteTweets = async (req, res) => {
 const getSingleTweet = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
-
-    const tweet = await prisma.tweet_parent.findUnique({
-      where: { id },
-      include: {
-        tweet_child: {
-          select: { id: true, tweet: true },
-        },
-        tweet_photos: {
-          select: { images: true },
-        },
-      },
-    });
+    const tweet = await getSingleTweetById(id);
 
     return res.status(200).json(tweet);
   } catch (error) {
@@ -129,7 +119,7 @@ const deleteTweet = async (req, res) => {
 
     const photoFileNames = await prisma.$queryRaw(
       Prisma.sql`SELECT tp.images AS tweet_photos FROM tweet_parent AS tps
-      JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`
+      JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`,
     );
 
     if (photoFileNames.length) {
