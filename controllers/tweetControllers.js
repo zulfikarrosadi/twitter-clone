@@ -5,6 +5,7 @@ const {
   getPhotofilename,
   deleteRelatedTweetChildAndTweetPhotos,
   deleteTweetParentById,
+  getAllTweets,
 } = require('../services/tweetService');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
@@ -74,7 +75,7 @@ const getTweets = async (req, res) => {
       delete getTweetOptions.skip;
     }
 
-    const tweets = await prisma.tweet_parent.findMany(getTweetOptions);
+    const tweets = await getAllTweets(getTweetOptions);
     if (!tweets.length) throw new Error('No tweet found');
 
     return res.json({ cursor: tweets[tweets.length - 1].id, tweets });

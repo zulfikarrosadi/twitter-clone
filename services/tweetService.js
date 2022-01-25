@@ -17,6 +17,16 @@ const getSingleTweetById = async (id) => {
   return tweet;
 };
 
+const getAllTweets = async (options) => {
+  try {
+    const tweets = await prisma.tweet_parent.findMany(options);
+    return tweets;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 const getPhotofilename = async (id) => {
   try {
     const photoFileNames = await prisma.$queryRaw(
@@ -60,6 +70,7 @@ const deleteTweetParentById = async (id) => {
 
 module.exports = {
   getSingleTweetById,
+  getAllTweets,
   getPhotofilename,
   deleteRelatedTweetChildAndTweetPhotos,
   deleteTweetParentById,
