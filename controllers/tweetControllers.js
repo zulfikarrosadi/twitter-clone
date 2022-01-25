@@ -7,6 +7,7 @@ const {
   deleteTweetParentById,
   getAllTweets,
   createTweet,
+  updateTweetById,
 } = require('../services/tweetService');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
@@ -169,7 +170,8 @@ const updateTweet = async (req, res) => {
       };
     }
 
-    await prisma.tweet_parent.update(updateOptions);
+    await updateTweetById(updateOptions);
+
     return res.status(200).json({
       message: 'tweet successed to update',
     });

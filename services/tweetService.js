@@ -37,6 +37,15 @@ const getAllTweets = async (options) => {
   }
 };
 
+const updateTweetById = async (data) => {
+  try {
+    await prisma.tweet_parent.update(data);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
 const getPhotofilename = async (id) => {
   try {
     const photoFileNames = await prisma.$queryRaw(
@@ -82,6 +91,7 @@ module.exports = {
   createTweet,
   getSingleTweetById,
   getAllTweets,
+  updateTweetById,
   getPhotofilename,
   deleteRelatedTweetChildAndTweetPhotos,
   deleteTweetParentById,
