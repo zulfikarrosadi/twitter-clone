@@ -2,6 +2,16 @@ const { PrismaClient, Prisma } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
+const createTweet = async (options) => {
+  try {
+    await prisma.tweet_parent.create({ data: options });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 const getSingleTweetById = async (id) => {
   const tweet = await prisma.tweet_parent.findUnique({
     where: { id },
@@ -69,6 +79,7 @@ const deleteTweetParentById = async (id) => {
 };
 
 module.exports = {
+  createTweet,
   getSingleTweetById,
   getAllTweets,
   getPhotofilename,

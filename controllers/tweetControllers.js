@@ -6,6 +6,7 @@ const {
   deleteRelatedTweetChildAndTweetPhotos,
   deleteTweetParentById,
   getAllTweets,
+  createTweet,
 } = require('../services/tweetService');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
@@ -52,7 +53,8 @@ const addTweet = async (req, res) => {
         };
       }
 
-      await prisma.tweet_parent.create({ data: createOptions });
+      await createTweet(createOptions);
+
       return res.status(201).json({
         message: 'tweet success created',
       });
