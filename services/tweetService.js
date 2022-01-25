@@ -13,18 +13,23 @@ const createTweet = async (options) => {
 };
 
 const getSingleTweetById = async (id) => {
-  const tweet = await prisma.tweet_parent.findUnique({
-    where: { id },
-    include: {
-      tweet_child: {
-        select: { id: true, tweet: true },
+  try {
+    const tweet = await prisma.tweet_parent.findUnique({
+      where: { id },
+      include: {
+        tweet_child: {
+          select: { id: true, tweet: true },
+        },
+        tweet_photos: {
+          select: { images: true },
+        },
       },
-      tweet_photos: {
-        select: { images: true },
-      },
-    },
-  });
-  return tweet;
+    });
+    return tweet;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };
 
 const getAllTweets = async (options) => {
@@ -46,6 +51,7 @@ const updateTweetById = async (data) => {
     return false;
   }
 };
+
 const getPhotofilename = async (id) => {
   try {
     const photoFileNames = await prisma.$queryRaw(
