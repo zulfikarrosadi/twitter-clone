@@ -1,4 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient, Prisma } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
@@ -17,4 +17,50 @@ const getSingleTweetById = async (id) => {
   return tweet;
 };
 
-module.exports = { getSingleTweetById };
+const getPhotofilename = async (id) => {
+  try {
+    const photoFileNames = await prisma.$queryRaw(
+      Prisma.sql`SELECT tp.images AS tweet_photos FROM tweet_parent AS tps
+      JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`,
+    );
+    return photoFileNames;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
+const deleteRelatedTweetChildAndTweetPhotos = async (id) => {
+  try {
+    await prisma.tweet_parent.update({
+      where: { id },
+      data: {
+        tweet_child: { deleteMany: { id_tweet_parent: id } },
+        tweet_photos: { deleteMany: { id_tweet_parent: id } },
+      },
+    });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+const deleteTweetParentById = async (id) => {
+  try {
+    await prisma.tweet_parent.delete({
+      where: { id },
+    });
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+module.exports = {
+  getSingleTweetById,
+  getPhotofilename,
+  deleteRelatedTweetChildAndTweetPhotos,
+  deleteTweetParentById,
+};

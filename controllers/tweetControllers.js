@@ -1,6 +1,11 @@
 const { PrismaClient, Prisma } = require('@prisma/client');
 const upload = require('../middlewares/upload');
-const { getSingleTweetById } = require('../services/tweetService');
+const {
+  getSingleTweetById,
+  getPhotofilename,
+  deleteRelatedTweetChildAndTweetPhotos,
+  deleteTweetParentById,
+} = require('../services/tweetService');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 
 const prisma = new PrismaClient();
@@ -117,26 +122,15 @@ const deleteTweet = async (req, res) => {
   try {
     const id = parseInt(req.params.idParent, 10);
 
-    const photoFileNames = await prisma.$queryRaw(
-      Prisma.sql`SELECT tp.images AS tweet_photos FROM tweet_parent AS tps
-      JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`,
-    );
-
+    const photoFileNames = await getPhotofilename(id);
     if (photoFileNames.length) {
       const fileName = photoFileNames.map((item) => item.tweet_photos);
       deleteMultipleFiles(fileName);
     }
 
-    await prisma.tweet_parent.update({
-      where: { id },
-      data: {
-        tweet_child: { deleteMany: { id_tweet_parent: id } },
-        tweet_photos: { deleteMany: { id_tweet_parent: id } },
-      },
-    });
-    await prisma.tweet_parent.delete({
-      where: { id },
-    });
+    await deleteRelatedTweetChildAndTweetPhotos(id);
+    await deleteTweetParentById(id);
+
     return res.status(200).json({
       message: 'tweet successed to deleted',
     });
