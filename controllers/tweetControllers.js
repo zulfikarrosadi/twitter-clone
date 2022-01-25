@@ -94,9 +94,9 @@ const getInfiniteTweets = async (req, res) => {
     getTweetOptions.cursor = { id: cursor };
     getTweetOptions.skip = 1;
 
-    const tweets = await prisma.tweet_parent.findMany(getTweetOptions);
-
+    const tweets = await getAllTweets(getTweetOptions);
     cursor = tweets[tweets.length - 1].id;
+
     return res.status(200).json({ cursor, tweets });
   } catch (error) {
     console.log(error);
