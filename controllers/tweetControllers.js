@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
 const upload = require('../middlewares/upload');
+const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
 const {
   getSingleTweetById,
   getPhotofilename,
@@ -9,9 +9,6 @@ const {
   createTweet,
   updateTweetById,
 } = require('../services/tweetService');
-const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
-
-const prisma = new PrismaClient();
 
 const getTweetOptions = {
   orderBy: { createdAt: 'desc' },
