@@ -25,32 +25,32 @@ const getTweetOptions = {
 
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
+    const { tweets } = req.body;
+    const createOptions = { tweet: tweets };
+
+    if (Array.isArray(tweets)) {
+      createOptions.tweet = tweets.shift();
+      createOptions.tweet_child = {
+        createMany: {
+          data: tweets.map((tweet) => ({
+            tweet,
+          })),
+        },
+      };
+    }
+
+    if (req.files) {
+      createOptions.tweet_photos = {
+        createMany: {
+          data: req.files.map((file) => ({
+            images: file.filename,
+          })),
+        },
+      };
+    }
     try {
       if (error) throw error;
-
-      const { tweets } = req.body;
       if (!tweets && !req.files) throw Error('tweet is null');
-      const createOptions = { tweet: tweets };
-
-      if (Array.isArray(tweets)) {
-        createOptions.tweet = tweets.shift();
-        createOptions.tweet_child = {
-          createMany: {
-            data: tweets.map((tweet) => ({
-              tweet,
-            })),
-          },
-        };
-      }
-      if (req.files) {
-        createOptions.tweet_photos = {
-          createMany: {
-            data: req.files.map((file) => ({
-              images: file.filename,
-            })),
-          },
-        };
-      }
 
       await createTweet(createOptions);
 
@@ -67,15 +67,14 @@ const addTweet = async (req, res) => {
 };
 
 const getTweets = async (req, res) => {
+  if (
+    Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor') &&
+    Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
+  ) {
+    delete getTweetOptions.cursor;
+    delete getTweetOptions.skip;
+  }
   try {
-    if (
-      Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor') &&
-      Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
-    ) {
-      delete getTweetOptions.cursor;
-      delete getTweetOptions.skip;
-    }
-
     const tweets = await getAllTweets(getTweetOptions);
     if (!tweets.length) throw new Error('No tweet found');
 
@@ -89,12 +88,11 @@ const getTweets = async (req, res) => {
 };
 
 const getInfiniteTweets = async (req, res) => {
+  let cursor = parseInt(req.params.cursor, 10);
+
+  getTweetOptions.cursor = { id: cursor };
+  getTweetOptions.skip = 1;
   try {
-    let cursor = parseInt(req.params.cursor, 10);
-
-    getTweetOptions.cursor = { id: cursor };
-    getTweetOptions.skip = 1;
-
     const tweets = await getAllTweets(getTweetOptions);
     cursor = tweets[tweets.length - 1].id;
 
@@ -108,8 +106,8 @@ const getInfiniteTweets = async (req, res) => {
 };
 
 const getSingleTweet = async (req, res) => {
+  const id = parseInt(req.params.id, 10);
   try {
-    const id = parseInt(req.params.id, 10);
     const tweet = await getSingleTweetById(id);
     if (!tweet) throw Error;
 
@@ -122,9 +120,8 @@ const getSingleTweet = async (req, res) => {
 };
 
 const deleteTweet = async (req, res) => {
+  const id = parseInt(req.params.idParent, 10);
   try {
-    const id = parseInt(req.params.idParent, 10);
-
     const photoFileNames = await getPhotofilename(id);
     if (photoFileNames.length) {
       const fileName = photoFileNames.map((item) => item.tweet_photos);
@@ -146,29 +143,28 @@ const deleteTweet = async (req, res) => {
 };
 
 const updateTweet = async (req, res) => {
-  try {
-    let { idParent: id, idChild = null } = req.params;
-    const { tweet } = req.body;
+  let { idParent: id, idChild = null } = req.params;
+  const { tweet } = req.body;
 
-    id = parseInt(id, 10);
-    idChild = parseInt(idChild, 10);
+  id = parseInt(id, 10);
+  idChild = parseInt(idChild, 10);
 
-    const updateOptions = {
-      where: { id },
-      data: { tweet },
-    };
+  const updateOptions = {
+    where: { id },
+    data: { tweet },
+  };
 
-    if (idChild) {
-      updateOptions.data = {
-        tweet_child: {
-          update: {
-            where: { id: idChild },
-            data: { tweet },
-          },
+  if (idChild) {
+    updateOptions.data = {
+      tweet_child: {
+        update: {
+          where: { id: idChild },
+          data: { tweet },
         },
-      };
-    }
-
+      },
+    };
+  }
+  try {
     await updateTweetById(updateOptions);
 
     return res.status(200).json({
