@@ -9,6 +9,7 @@ const {
   createTweet,
   updateTweetById,
 } = require('../services/tweetService');
+const errorHanlder = require('../utils/errorHanlder');
 
 const getTweetOptions = {
   orderBy: { createdAt: 'desc' },
@@ -24,7 +25,8 @@ const getTweetOptions = {
 };
 
 const addTweet = async (req, res) => {
-  upload(req, res, async (error) => {
+  upload(req, res, async (e) => {
+    const beforeTime = new Date().getTime();
     const { tweets } = req.body;
     const createOptions = { tweet: tweets };
 
@@ -49,24 +51,34 @@ const addTweet = async (req, res) => {
       };
     }
     try {
-      if (error) throw error;
+      if (e) throw e;
       if (!tweets && !req.files) throw Error('tweet is null');
 
-      await createTweet(createOptions);
+      const result = await createTweet(createOptions);
+
+      const afterTime = new Date().getTime();
+      const timelapse = afterTime - beforeTime;
 
       return res.status(201).json({
-        message: 'tweet success created',
+        timelapse: `${timelapse} ms`,
+        curosr: null,
+        tweets: { id: result.id },
+        error: null,
       });
-    } catch (errors) {
-      console.log(errors);
+    } catch (error) {
+      console.log(error);
       return res.status(400).json({
-        message: 'tweet failed to create',
+        timelapse: null,
+        curosr: null,
+        tweets: null,
+        error: errorHanlder(error),
       });
     }
   });
 };
 
 const getTweets = async (req, res) => {
+  const beforeTime = new Date().getTime();
   if (
     Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor') &&
     Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
@@ -76,18 +88,30 @@ const getTweets = async (req, res) => {
   }
   try {
     const tweets = await getAllTweets(getTweetOptions);
-    if (!tweets.length) throw new Error('No tweet found');
+    if (!tweets.length) throw new Error('Tweet not found');
 
-    return res.json({ cursor: tweets[tweets.length - 1].id, tweets });
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
+
+    return res.status(200).json({
+      timelapse: `${timelapse} ms`,
+      curosr: tweets[tweets.length - 1].id,
+      tweets,
+      error: null,
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
-      message: `tweet failed to fetch, ${error.message}`,
+      timelapse: null,
+      curosr: null,
+      tweets: null,
+      error: errorHanlder(error.message),
     });
   }
 };
 
 const getInfiniteTweets = async (req, res) => {
+  const beforeTime = new Date().getTime();
   let cursor = parseInt(req.params.cursor, 10);
 
   getTweetOptions.cursor = { id: cursor };
@@ -96,30 +120,54 @@ const getInfiniteTweets = async (req, res) => {
     const tweets = await getAllTweets(getTweetOptions);
     cursor = tweets[tweets.length - 1].id;
 
-    return res.status(200).json({ cursor, tweets });
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
+
+    return res.status(200).json({
+      timelapse: `${timelapse} ms`,
+      cursor,
+      tweets,
+      error: null,
+    });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      message: 'There is no more tweets to load',
+    return res.status(404).json({
+      timelapse: null,
+      curosr: null,
+      tweets: null,
+      error: errorHanlder('No more tweet'),
     });
   }
 };
 
 const getSingleTweet = async (req, res) => {
+  const beforeTime = new Date().getTime();
   const id = parseInt(req.params.id, 10);
   try {
     const tweet = await getSingleTweetById(id);
-    if (!tweet) throw Error;
+    if (!tweet) throw Error('Tweet not found');
 
-    return res.status(200).json(tweet);
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
+
+    return res.status(200).json({
+      timelapse: `${timelapse} ms`,
+      curosr: null,
+      tweets: tweet,
+      error: null,
+    });
   } catch (error) {
     return res.status(404).json({
-      message: 'Tweet not found',
+      timelapse: null,
+      curosr: null,
+      tweets: null,
+      error: errorHanlder(error.message),
     });
   }
 };
 
 const deleteTweet = async (req, res) => {
+  const beforeTime = new Date().getTime();
   const id = parseInt(req.params.idParent, 10);
   try {
     const photoFileNames = await getPhotofilename(id);
@@ -131,18 +179,28 @@ const deleteTweet = async (req, res) => {
     await deleteRelatedTweetChildAndTweetPhotos(id);
     await deleteTweetParentById(id);
 
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
+
     return res.status(200).json({
-      message: 'tweet successed to deleted',
+      timelapse: `${timelapse} ms`,
+      curosr: null,
+      tweets: { id },
+      error: null,
     });
   } catch (error) {
     console.log(error);
     return res.status(404).json({
-      message: 'tweet not found and failed to delete',
+      timelapse: null,
+      curosr: null,
+      tweets: null,
+      error: errorHanlder('Tweet not found'),
     });
   }
 };
 
 const updateTweet = async (req, res) => {
+  const beforeTime = new Date().getTime();
   let { idParent: id, idChild = null } = req.params;
   const { tweet } = req.body;
 
@@ -165,15 +223,24 @@ const updateTweet = async (req, res) => {
     };
   }
   try {
-    await updateTweetById(updateOptions);
+    const result = await updateTweetById(updateOptions);
+
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
 
     return res.status(200).json({
-      message: 'tweet successed to update',
+      timelapse: `${timelapse} ms`,
+      curosr: null,
+      tweets: { id: result.id },
+      error: null,
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      message: 'tweet failed to update',
+    return res.status(404).json({
+      timelapse: null,
+      curosr: null,
+      tweets: null,
+      error: errorHanlder('Tweet not found'),
     });
   }
 };
