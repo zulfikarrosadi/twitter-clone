@@ -138,8 +138,8 @@ const deleteTweet = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
-      message: 'tweet failed to delete',
+    return res.status(404).json({
+      message: 'tweet not found and failed to delete',
     });
   }
 };
