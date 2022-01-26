@@ -22,13 +22,14 @@ const getTweetOptions = {
     },
   },
 };
-// BUGS: Even not providing anything, but when user send the request to add tweet, it accepted
+
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
     try {
       if (error) throw error;
 
-      const { tweets = null } = req.body;
+      const { tweets } = req.body;
+      if (!tweets && !req.files) throw Error('tweet is null');
       const createOptions = { tweet: tweets };
 
       if (Array.isArray(tweets)) {
