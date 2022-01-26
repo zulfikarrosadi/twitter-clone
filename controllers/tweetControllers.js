@@ -22,7 +22,7 @@ const getTweetOptions = {
     },
   },
 };
-
+// BUGS: Even not providing anything, but when user send the request to add tweet, it accepted
 const addTweet = async (req, res) => {
   upload(req, res, async (error) => {
     try {
@@ -110,6 +110,7 @@ const getSingleTweet = async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     const tweet = await getSingleTweetById(id);
+    if (!tweet) throw Error;
 
     return res.status(200).json(tweet);
   } catch (error) {
@@ -143,6 +144,7 @@ const deleteTweet = async (req, res) => {
   }
 };
 
+// BUGS cannot edit the child tweet
 const updateTweet = async (req, res) => {
   try {
     let { idParent: id, idChild = null } = req.params;
