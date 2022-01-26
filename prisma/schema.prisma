@@ -29,6 +29,7 @@ model tweet_photos {
   id              Int          @id @default(autoincrement())
   id_tweet_parent Int
   images          String?      @db.VarChar(255)
+  description     String?      @db.VarChar(255)
   tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
   @@index([id_tweet_parent], name: "fk_tweet_parent")
