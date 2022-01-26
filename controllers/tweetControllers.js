@@ -145,7 +145,6 @@ const deleteTweet = async (req, res) => {
   }
 };
 
-// BUGS cannot edit the child tweet
 const updateTweet = async (req, res) => {
   try {
     let { idParent: id, idChild = null } = req.params;
