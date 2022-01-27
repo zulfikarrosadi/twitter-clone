@@ -8,12 +8,13 @@ datasource db {
 }
 
 model tweet_parent {
-  id           Int            @id @default(autoincrement())
-  tweet        String?        @db.VarChar(140)
-  createdAt    DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt    DateTime?      @updatedAt @map("updated_at")
-  tweet_child  tweet_child[]
-  tweet_photos tweet_photos[]
+  id            Int             @id @default(autoincrement())
+  tweet         String?         @db.VarChar(140)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime?       @updatedAt @map("updated_at")
+  tweet_child   tweet_child[]
+  tweet_comment tweet_comment[]
+  tweet_photos  tweet_photos[]
 }
 
 model tweet_child {
@@ -30,6 +31,15 @@ model tweet_photos {
   id_tweet_parent Int
   images          String?      @db.VarChar(255)
   description     String?      @db.VarChar(255)
+  tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
+
+  @@index([id_tweet_parent], name: "fk_tweet_parent")
+}
+
+model tweet_comment {
+  id              Int          @id @default(autoincrement())
+  id_tweet_parent Int
+  content         String       @db.VarChar(500)
   tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
   @@index([id_tweet_parent], name: "fk_tweet_parent")
