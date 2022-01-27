@@ -17,6 +17,10 @@ const getSingleTweetById = async (id) => {
       tweet_photos: {
         select: { images: true },
       },
+      tweet_comment: {
+        select: { id: true, content: true },
+        take: 2,
+      },
     },
   });
   return result;
@@ -65,6 +69,7 @@ const createComment = async (idParent, comment) => {
         id_tweet_parent: idParent,
         content: comment,
       },
+      select: { id: true },
     });
     return result;
   } catch (error) {

@@ -22,6 +22,10 @@ const getTweetOptions = {
     tweet_photos: {
       select: { images: true },
     },
+    tweet_comment: {
+      select: { id: true, content: true },
+      take: 2,
+    },
   },
 };
 
