@@ -6,6 +6,7 @@ const {
   getSingleTweet,
   deleteTweet,
   updateTweet,
+  addComment,
 } = require('../controllers/tweetControllers');
 
 const router = Router();
@@ -18,5 +19,7 @@ router.post('/', addTweet);
 router.delete('/:idParent', deleteTweet);
 router.patch('/:idParent/', updateTweet);
 router.patch('/:idParent/:idChild', updateTweet);
+
+router.post('/:idParent/comments', addComment);
 
 module.exports = router;
