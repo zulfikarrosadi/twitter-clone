@@ -58,6 +58,20 @@ const deleteTweetParentById = async (id) => {
   return result;
 };
 
+const createComment = async (idParent, comment) => {
+  try {
+    const result = await prisma.tweet_comment.create({
+      data: {
+        id_tweet_parent: idParent,
+        content: comment,
+      },
+    });
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
 module.exports = {
   createTweet,
   getSingleTweetById,
@@ -66,4 +80,5 @@ module.exports = {
   getPhotofilename,
   deleteRelatedTweetChildAndTweetPhotos,
   deleteTweetParentById,
+  createComment,
 };
