@@ -11,6 +11,9 @@ const errorHanlder = (error) => {
     case 'No more tweet':
       errorMessage = 'There is no more tweets to load';
       break;
+    case 'Foreign key error':
+      errorMessage = "You're trying to add comment to not existing tweet :D";
+      break;
     default:
       break;
   }
