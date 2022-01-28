@@ -17,4 +17,13 @@ const createComment = async (idParent, comment) => {
   }
 };
 
-module.exports = { createComment };
+const getAllCommentsByIdTweet = async (idTweet) => {
+  const result = await prisma.tweet_comment.findMany({
+    where: { id_tweet_parent: idTweet },
+    take: 10,
+    select: { id: true, content: true, createdAt: true },
+    orderBy: { createdAt: 'desc' },
+  });
+  return result;
+};
+module.exports = { createComment, getAllCommentsByIdTweet };
