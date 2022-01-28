@@ -14,6 +14,9 @@ const errorHanlder = (error) => {
     case 'Foreign key error':
       errorMessage = "You're trying to add comment to not existing tweet :D";
       break;
+    case 'Comment not found':
+      errorMessage = 'The comment is not found';
+      break;
     default:
       break;
   }
