@@ -40,7 +40,8 @@ model tweet_comment {
   id              Int          @id @default(autoincrement())
   id_tweet_parent Int
   content         String       @db.VarChar(500)
+  createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
   tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
-  @@index([id_tweet_parent], name: "fk_tweet_parent")
+  @@index([id_tweet_parent], name: "id_tweet_parent")
 }
