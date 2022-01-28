@@ -3,6 +3,7 @@ const getCursor = require('../utils/getCursor');
 const {
   createComment,
   getAllCommentsByIdTweet,
+  deleteCommentById,
 } = require('../services/commentService');
 
 const addComment = async (req, res) => {
@@ -59,4 +60,31 @@ const getComments = async (req, res) => {
   }
 };
 
-module.exports = { addComment, getComments };
+const deleteComment = async (req, res) => {
+  const beforeTime = new Date().getTime();
+  const idTweet = parseInt(req.params.idTweet, 10);
+  const idComment = parseInt(req.params.idComment, 10);
+  try {
+    const result = await deleteCommentById(idTweet, idComment);
+    if (result.code === 'P2025') throw Error('Comment not found');
+
+    const afterTime = new Date().getTime();
+    const timelapse = afterTime - beforeTime;
+
+    return res.status(200).json({
+      timelapse: `${timelapse} ms`,
+      cursor: null,
+      comment: result,
+      error: null,
+    });
+  } catch (error) {
+    return res.status(404).json({
+      timelapse: null,
+      cursor: null,
+      comment: null,
+      error: errorHanlder(error.message),
+    });
+  }
+};
+
+module.exports = { addComment, getComments, deleteComment };
