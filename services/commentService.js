@@ -26,4 +26,18 @@ const getAllCommentsByIdTweet = async (idTweet) => {
   });
   return result;
 };
-module.exports = { createComment, getAllCommentsByIdTweet };
+
+const deleteCommentById = async (idTweet, idComment) => {
+  try {
+    const result = await prisma.tweet_comment.delete({
+      where: { id: idComment },
+      select: { id: true },
+    });
+
+    return result;
+  } catch (error) {
+    return error;
+  }
+};
+
+module.exports = { createComment, getAllCommentsByIdTweet, deleteCommentById };
