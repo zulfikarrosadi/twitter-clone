@@ -27,6 +27,17 @@ const getAllCommentsByIdTweet = async (idTweet) => {
   return result;
 };
 
+const getInfinteCommentByCursor = async (idTweet, cursor) => {
+  const result = await prisma.tweet_comment.findMany({
+    orderBy: { createdAt: 'desc' },
+    cursor: { id: cursor },
+    skip: 1,
+    where: { id_tweet_parent: idTweet },
+    take: 10,
+  });
+  return result;
+};
+
 const deleteCommentById = async (idTweet, idComment) => {
   try {
     const result = await prisma.tweet_comment.delete({
@@ -40,4 +51,9 @@ const deleteCommentById = async (idTweet, idComment) => {
   }
 };
 
-module.exports = { createComment, getAllCommentsByIdTweet, deleteCommentById };
+module.exports = {
+  createComment,
+  getAllCommentsByIdTweet,
+  getInfinteCommentByCursor,
+  deleteCommentById,
+};
