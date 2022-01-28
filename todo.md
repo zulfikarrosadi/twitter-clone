@@ -21,6 +21,8 @@ features:
   16. add prettierrc to configure trailing coma, operator
   17. create custom error instance and fix error feedback
   18. create schema for success feedback
+  19. user can add image description (alt text)               UNDER CONSTRUCTION
+  20. ability to add comment                                                DONE
 
 bug:
   1. DONE 
