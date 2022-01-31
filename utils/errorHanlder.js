@@ -17,6 +17,9 @@ const errorHanlder = (error) => {
     case 'Comment not found':
       errorMessage = 'The comment is not found';
       break;
+    case 'Request Url Invalid':
+      errorMessage = 'Your URL is invalid, please double check it :D';
+      break;
     default:
       break;
   }
