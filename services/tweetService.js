@@ -26,8 +26,45 @@ const getSingleTweetById = async (id) => {
   return result;
 };
 
-const getAllTweets = async (options) => {
-  const result = await prisma.tweet_parent.findMany(options);
+const getAllTweets = async () => {
+  const result = await prisma.tweet_parent.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+    include: {
+      tweet_child: {
+        select: { id: true, tweet: true },
+      },
+      tweet_photos: {
+        select: { images: true },
+      },
+      tweet_comment: {
+        select: { id: true, content: true },
+        take: 2,
+      },
+    },
+  });
+  return result;
+};
+
+const getInfiniteTweetsByCursor = async (cursor) => {
+  const result = await prisma.tweet_parent.findMany({
+    orderBy: { createdAt: 'desc' },
+    cursor: { id: cursor },
+    skip: 1,
+    take: 10,
+    include: {
+      tweet_child: {
+        select: { id: true, tweet: true },
+      },
+      tweet_photos: {
+        select: { images: true },
+      },
+      tweet_comment: {
+        select: { id: true, content: true },
+        take: 2,
+      },
+    },
+  });
   return result;
 };
 
@@ -65,6 +102,7 @@ const deleteTweetParentById = async (id) => {
 module.exports = {
   createTweet,
   getSingleTweetById,
+  getInfiniteTweetsByCursor,
   getAllTweets,
   updateTweetById,
   getPhotofilename,

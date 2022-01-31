@@ -13,6 +13,7 @@ const createComment = async (idParent, comment) => {
     });
     return result;
   } catch (error) {
+    console.log(error);
     return error;
   }
 };
