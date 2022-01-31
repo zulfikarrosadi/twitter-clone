@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 
-const tweetRoutes = require('./routes/tweetRoutes');
+const tweetRoutes = require('./routes/tweetRoute');
 const commentRoutes = require('./routes/commentRoute');
 
 const app = express();

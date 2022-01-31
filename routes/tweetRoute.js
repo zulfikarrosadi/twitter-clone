@@ -6,7 +6,7 @@ const {
   getSingleTweet,
   deleteTweet,
   updateTweet,
-} = require('../controllers/tweetControllers');
+} = require('../controllers/tweetController');
 
 const router = Router();
 
