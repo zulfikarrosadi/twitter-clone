@@ -7,16 +7,17 @@ const {
   deleteTweet,
   updateTweet,
 } = require('../controllers/tweetController');
+const isUrlParamInt = require('../middlewares/validateUrlParam');
 
 const router = Router();
 
 router.get('/', getTweets);
-router.get('/infinite/:cursor', getInfiniteTweets);
-router.get('/:id', getSingleTweet);
+router.get('/infinite/:cursor', isUrlParamInt, getInfiniteTweets);
+router.get('/:id', isUrlParamInt, getSingleTweet);
 
 router.post('/', addTweet);
-router.delete('/:idParent', deleteTweet);
-router.patch('/:idParent/', updateTweet);
-router.patch('/:idParent/:idChild', updateTweet);
+router.delete('/:idParent', isUrlParamInt, deleteTweet);
+router.patch('/:idParent/', isUrlParamInt, updateTweet);
+router.patch('/:idParent/:idChild', isUrlParamInt, updateTweet);
 
 module.exports = router;
