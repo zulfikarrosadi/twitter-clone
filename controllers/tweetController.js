@@ -1,32 +1,17 @@
 const upload = require('../middlewares/upload');
 const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
+const errorHanlder = require('../utils/errorHanlder');
+const getCursor = require('../utils/getCursor');
 const {
   getSingleTweetById,
   getPhotofilename,
   deleteRelatedTweetChildAndTweetPhotos,
+  getInfiniteTweetsByCursor,
   deleteTweetParentById,
   getAllTweets,
   createTweet,
   updateTweetById,
 } = require('../services/tweetService');
-const errorHanlder = require('../utils/errorHanlder');
-
-const getTweetOptions = {
-  orderBy: { createdAt: 'desc' },
-  take: 10,
-  include: {
-    tweet_child: {
-      select: { id: true, tweet: true },
-    },
-    tweet_photos: {
-      select: { images: true },
-    },
-    tweet_comment: {
-      select: { id: true, content: true },
-      take: 2,
-    },
-  },
-};
 
 const addTweet = async (req, res) => {
   upload(req, res, async (e) => {
@@ -83,15 +68,9 @@ const addTweet = async (req, res) => {
 
 const getTweets = async (req, res) => {
   const beforeTime = new Date().getTime();
-  if (
-    Object.prototype.hasOwnProperty.call(getTweetOptions, 'cursor') &&
-    Object.prototype.hasOwnProperty.call(getTweetOptions, 'skip')
-  ) {
-    delete getTweetOptions.cursor;
-    delete getTweetOptions.skip;
-  }
+
   try {
-    const tweets = await getAllTweets(getTweetOptions);
+    const tweets = await getAllTweets();
     if (!tweets.length) throw new Error('Tweet not found');
 
     const afterTime = new Date().getTime();
@@ -118,11 +97,9 @@ const getInfiniteTweets = async (req, res) => {
   const beforeTime = new Date().getTime();
   let cursor = parseInt(req.params.cursor, 10);
 
-  getTweetOptions.cursor = { id: cursor };
-  getTweetOptions.skip = 1;
   try {
-    const tweets = await getAllTweets(getTweetOptions);
-    cursor = tweets[tweets.length - 1].id;
+    const tweets = await getInfiniteTweetsByCursor(cursor);
+    cursor = getCursor(tweets);
 
     const afterTime = new Date().getTime();
     const timelapse = afterTime - beforeTime;
@@ -147,6 +124,7 @@ const getInfiniteTweets = async (req, res) => {
 const getSingleTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
   const id = parseInt(req.params.id, 10);
+
   try {
     const tweet = await getSingleTweetById(id);
     if (!tweet) throw Error('Tweet not found');
@@ -173,6 +151,7 @@ const getSingleTweet = async (req, res) => {
 const deleteTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
   const id = parseInt(req.params.idParent, 10);
+
   try {
     const photoFileNames = await getPhotofilename(id);
     if (photoFileNames.length) {
@@ -205,11 +184,9 @@ const deleteTweet = async (req, res) => {
 
 const updateTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
-  let { idParent: id, idChild = null } = req.params;
+  const id = parseInt(req.params.idParent, 10);
+  const idChild = parseInt(req.params.idChild, 10) || null;
   const { tweet } = req.body;
-
-  id = parseInt(id, 10);
-  idChild = parseInt(idChild, 10);
 
   const updateOptions = {
     where: { id },
