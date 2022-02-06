@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^2.27.0",
+    "brcypt": "^1.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-validator": "^6.12.2",
