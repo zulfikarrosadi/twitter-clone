@@ -1,5 +1,6 @@
 const { createUser } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
+const hashPassword = require('../utils/hashPassword');
 
 // TODO
 // - error handling for unique constraint
@@ -13,7 +14,9 @@ const addUser = async (req, res) => {
   const { email, password, username } = req.body;
 
   try {
-    const result = await createUser(email, password, username);
+    const hashedPassword = await hashPassword(password);
+    console.log(hashedPassword);
+    const result = await createUser(email, hashedPassword, username);
 
     const afterTime = new Date().getTime();
     const timelapse = afterTime - beforeTime;
