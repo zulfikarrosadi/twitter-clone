@@ -13,12 +13,11 @@ const uniqueConstraintErrorHandler = (e, body) => {
       value: body.email,
       message: 'This email is already registered!',
     });
-  }
-  if (e.split(' ').includes('`username_unique`')) {
+  } else if (e.split(' ').includes('`username_unique`')) {
     errors.push({
       path: 'email',
       value: body.email,
-      message: 'This email is already registered!',
+      message: 'This username is takken, please choose another username',
     });
   }
   return errors;
