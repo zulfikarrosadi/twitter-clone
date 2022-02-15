@@ -1,13 +1,16 @@
 const { createUser } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const hashPassword = require('../utils/hashPassword');
+const getTimelapse = require('../utils/getTimelapse');
 
 // TODO
 // - error handling for unique constraint
 // - make error response schema and more reuesable
 // - express validator
 // - hash password
-// - utils to get timelapse
+// - utils to get timelapse (considering using prisma.$use middleware to use logging)
+// - do some research about the best response schema from rest api
+// - how to know uesr ip js
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -15,11 +18,9 @@ const addUser = async (req, res) => {
 
   try {
     const hashedPassword = await hashPassword(password);
-    console.log(hashedPassword);
     const result = await createUser(email, hashedPassword, username);
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
