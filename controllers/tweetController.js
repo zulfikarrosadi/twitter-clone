@@ -1,7 +1,7 @@
 const upload = require('../middlewares/upload');
-const deleteMultipleFiles = require('../utils/deleteMultipleFiles');
+const deleteMultipleFiles = require('../utils/fileUtil');
 const errorHanlder = require('../utils/errorHanlder');
-const getCursor = require('../utils/getCursor');
+const getTimelapse = require('../utils/timeUtil');
 const {
   getSingleTweetById,
   getPhotofilename,
@@ -12,41 +12,25 @@ const {
   createTweet,
   updateTweetById,
 } = require('../services/tweetService');
+const {
+  tweetSaveValidation,
+  tweetUpdateValidation,
+  getCursor,
+} = require('../utils/tweetUtils');
 
 const addTweet = async (req, res) => {
   upload(req, res, async (e) => {
     const beforeTime = new Date().getTime();
     const { tweets } = req.body;
-    const createOptions = { tweet: tweets };
 
-    if (Array.isArray(tweets)) {
-      createOptions.tweet = tweets.shift();
-      createOptions.tweet_child = {
-        createMany: {
-          data: tweets.map((tweet) => ({
-            tweet,
-          })),
-        },
-      };
-    }
+    const createOptions = tweetSaveValidation(tweets, req.files);
 
-    if (req.files) {
-      createOptions.tweet_photos = {
-        createMany: {
-          data: req.files.map((file) => ({
-            images: file.filename,
-          })),
-        },
-      };
-    }
     try {
       if (e) throw e;
       if (!tweets && !req.files) throw Error('tweet is null');
 
       const result = await createTweet(createOptions);
-
-      const afterTime = new Date().getTime();
-      const timelapse = afterTime - beforeTime;
+      const timelapse = getTimelapse(beforeTime);
 
       return res.status(201).json({
         timelapse: `${timelapse} ms`,
@@ -72,9 +56,7 @@ const getTweets = async (req, res) => {
   try {
     const tweets = await getAllTweets();
     if (!tweets.length) throw new Error('Tweet not found');
-
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -100,9 +82,7 @@ const getInfiniteTweets = async (req, res) => {
   try {
     const tweets = await getInfiniteTweetsByCursor(cursor);
     cursor = getCursor(tweets);
-
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -128,9 +108,7 @@ const getSingleTweet = async (req, res) => {
   try {
     const tweet = await getSingleTweetById(id);
     if (!tweet) throw Error('Tweet not found');
-
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -162,8 +140,7 @@ const deleteTweet = async (req, res) => {
     await deleteRelatedTweetChildAndTweetPhotos(id);
     await deleteTweetParentById(id);
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -188,21 +165,7 @@ const updateTweet = async (req, res) => {
   const idChild = parseInt(req.params.idChild, 10) || null;
   const { tweet } = req.body;
 
-  const updateOptions = {
-    where: { id },
-    data: { tweet },
-  };
-
-  if (idChild) {
-    updateOptions.data = {
-      tweet_child: {
-        update: {
-          where: { id: idChild },
-          data: { tweet },
-        },
-      },
-    };
-  }
+  const updateOptions = tweetUpdateValidation(id, idChild, tweet);
   try {
     const result = await updateTweetById(updateOptions);
 
