@@ -1,11 +1,12 @@
 const errorHanlder = require('../utils/errorHanlder');
-const getCursor = require('../utils/getCursor');
+const { getCursor } = require('../utils/tweetUtils');
 const {
   createComment,
   getAllCommentsByIdTweet,
   getInfinteCommentByCursor,
   deleteCommentById,
 } = require('../services/commentService');
+const getTimelapse = require('../utils/timeUtil');
 
 const addComment = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -15,8 +16,7 @@ const addComment = async (req, res) => {
     const result = await createComment(idTweet, comment);
     if (result.code === 'P2003') throw Error('Foreign key error');
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(201).json({
       timelapse: `${timelapse} ms`,
@@ -42,8 +42,7 @@ const getComments = async (req, res) => {
     const result = await getAllCommentsByIdTweet(idTweet);
     if (!result.length) throw Error('Comment not found');
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -70,8 +69,7 @@ const getInfinteComment = async (req, res) => {
     const result = await getInfinteCommentByCursor(idTweet, cursor);
     if (!result.length) throw Error('Comment not found');
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -97,8 +95,7 @@ const deleteComment = async (req, res) => {
     const result = await deleteCommentById(idTweet, idComment);
     if (result.code === 'P2025') throw Error('Comment not found');
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
