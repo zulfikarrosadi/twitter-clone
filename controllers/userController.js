@@ -1,10 +1,12 @@
 const { createUser, getUser } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
-const hashPassword = require('../utils/hashPassword');
-const getTimelapse = require('../utils/getTimelapse');
-const verifyPassword = require('../utils/verifyPassword');
-const createHashUserId = require('../utils/hashUserId');
+const getTimelapse = require('../utils/timeUtil');
 const config = require('../constant/config');
+const {
+  verifyPassword,
+  hashPassword,
+  hashUserId,
+} = require('../utils/userUtil');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -41,7 +43,7 @@ const loginUser = async (req, res) => {
     const isVerified = await verifyPassword(password, user.password);
     if (!isVerified) throw new Error('Wrong password');
 
-    const hashedUserId = createHashUserId(user.id);
+    const hashedUserId = hashUserId(user.id);
 
     // store username and hashedUserId(as a key) in redis
 
