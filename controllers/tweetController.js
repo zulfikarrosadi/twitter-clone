@@ -21,9 +21,9 @@ const {
 const addTweet = async (req, res) => {
   upload(req, res, async (e) => {
     const beforeTime = new Date().getTime();
-    const { tweets } = req.body;
+    const { tweets, user } = req.body;
 
-    const createOptions = tweetSaveValidation(tweets, req.files);
+    const createOptions = tweetSaveValidation(tweets, req.files, user);
 
     try {
       if (e) throw e;

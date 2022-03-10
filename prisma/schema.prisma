@@ -8,27 +8,28 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique @db.VarChar(150)
-  password  String   @db.VarChar(255)
-  username  String   @unique @db.VarChar(50)
-  createdAt DateTime @default(now()) @db.DateTime()
-
+  id           Int            @id @default(autoincrement())
+  email        String         @unique @db.VarChar(150)
+  password     String         @db.VarChar(255)
+  username     String         @unique @db.VarChar(50)
+  createdAt    DateTime       @default(now()) @db.Timestamp(6)
   tweet_parent tweet_parent[]
+
   @@map("user")
 }
 
 model tweet_parent {
-  id        Int       @id @default(autoincrement())
-  tweet     String?   @db.VarChar(140)
-  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(6)
-  updatedAt DateTime? @updatedAt @map("updated_at")
-  authorId  Int
-
+  id            Int             @id @default(autoincrement())
+  tweet         String?         @db.VarChar(140)
+  createdAt     DateTime        @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt     DateTime?       @updatedAt @map("updated_at")
+  authorId      Int
   author        User            @relation(fields: [authorId], references: [id])
   tweet_child   tweet_child[]
   tweet_comment tweet_comment[]
   tweet_photos  tweet_photos[]
+
+  @@index([authorId], name: "fk_tweet_parent_user")
 }
 
 model tweet_child {
