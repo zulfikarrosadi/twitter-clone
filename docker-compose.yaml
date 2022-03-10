@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  redis-server-twitter:
+    container_name: redis-server-twitter
+    image: 'redis:latest'
+    command: redis-server /usr/local/etc/redis/redis.conf
+    ports:
+      - '5000:6379'
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+  redis-client-twitter:
+    container_name: redis-client-twitter
+    image: 'redis:latest'
