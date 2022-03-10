@@ -5,8 +5,8 @@
  * @param {Reqeust} files
  * @returns createOptionsObject
  */
-const tweetSaveValidation = (tweets, files) => {
-  const createOptions = { tweet: tweets };
+const tweetSaveValidation = (tweets, files, user) => {
+  const createOptions = { tweet: tweets, authorId: user };
 
   if (Array.isArray(tweets)) {
     createOptions.tweet = tweets.shift();
