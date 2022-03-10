@@ -12,7 +12,12 @@ const createUser = async (email, password, username) => {
 const getUser = async (email) => {
   const result = await prisma.user.findUnique({
     where: { email },
-    select: { id: true, email: true, password: true },
+    select: {
+      id: true,
+      email: true,
+      username: true,
+      password: true,
+    },
   });
   return result;
 };

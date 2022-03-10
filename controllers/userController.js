@@ -11,7 +11,7 @@ const {
   createSession,
   getSession,
   deleteSession,
-} = require('../services/redisConnection');
+} = require('../services/redisService');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();

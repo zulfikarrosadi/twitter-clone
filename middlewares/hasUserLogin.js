@@ -1,4 +1,4 @@
-const { getSession } = require('../services/redisConnection');
+const { getSession } = require('../services/redisService');
 
 /**
  * check the user if user is already log in
