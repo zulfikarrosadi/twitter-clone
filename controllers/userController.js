@@ -7,22 +7,42 @@ const {
   hashPassword,
   hashUserId,
 } = require('../utils/userUtil');
+const {
+  createSession,
+  getSession,
+  deleteSession,
+} = require('../services/redisConnection');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
   const { email, password, username } = req.body;
-
   try {
     const hashedPassword = await hashPassword(password);
-    const result = await createUser(email, hashedPassword, username);
+    const user = await createUser(email, hashedPassword, username);
+    const hashedUserId = hashUserId(user.id);
+
+    await createSession(hashedUserId, {
+      userId: user.id,
+      username: user.username,
+    });
 
     const timelapse = getTimelapse(beforeTime);
+    const data = getSession(hashedUserId);
+    console.log(data);
 
-    return res.status(200).json({
-      timelapse: `${timelapse} ms`,
-      userId: result.id,
-      error: null,
-    });
+    return res
+      .status(200)
+      .cookie('JERAWAT', hashedUserId, {
+        maxAge: config.ONE_HOUR,
+        SameSite: 'Lax',
+        httpOnly: true,
+      })
+      .json({
+        timelapse: `${timelapse} ms`,
+        userId: user.id,
+        error: null,
+        data,
+      });
   } catch (error) {
     console.log('catch', req.body);
     console.log(error);
@@ -46,6 +66,10 @@ const loginUser = async (req, res) => {
     const hashedUserId = hashUserId(user.id);
 
     // store username and hashedUserId(as a key) in redis
+    await createSession(hashedUserId, {
+      userId: user.id,
+      username: user.username,
+    });
 
     return res
       .status(200)
@@ -54,16 +78,27 @@ const loginUser = async (req, res) => {
         SameSite: 'Lax',
         httpOnly: true,
       })
-      .json({ message: 'ok' });
+      .json({ message: 'ok', username: user.username });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
 
-// eslint-disable-next-line arrow-body-style
 const logOutUser = async (req, res) => {
-  // remove user information on redis
-  return res.status(200).cookie('JERAWAT', '', { maxAge: 1 }).send('Log out');
+  try {
+    // remove user information on redis
+    const { JERAWAT } = req.cookies;
+
+    await deleteSession(JERAWAT);
+
+    return res.status(200).cookie('JERAWAT', '', { maxAge: 1 }).send('Log out');
+  } catch (error) {
+    return res.status(500).send('error');
+  }
 };
 
-module.exports = { addUser, loginUser, logOutUser };
+module.exports = {
+  addUser,
+  loginUser,
+  logOutUser,
+};
