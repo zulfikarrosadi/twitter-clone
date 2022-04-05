@@ -11,9 +11,14 @@ const getTimelapse = require('../utils/timeUtil');
 const addComment = async (req, res) => {
   const beforeTime = new Date().getTime();
   const idTweet = parseInt(req.params.idTweet, 10);
+
   const { comment } = req.body;
+  const { userId } = req.user;
+
+  if (!comment) throw Error('comment is empty');
+
   try {
-    const result = await createComment(idTweet, comment);
+    const result = await createComment(idTweet, comment, userId);
     if (result.code === 'P2003') throw Error('Foreign key error');
 
     const timelapse = getTimelapse(beforeTime);
