@@ -18,5 +18,7 @@ app.use('/tweets', tweetRoutes);
 app.use('/tweets/comments', commentRoutes);
 app.use('/users', userRoutes);
 
+app.use((req, res) => res.status(404).json({ message: 'page not found' }));
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`listening to http://localhost:${PORT}`));
