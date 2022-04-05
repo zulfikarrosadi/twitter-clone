@@ -2,12 +2,13 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const createComment = async (idParent, comment) => {
+const createComment = async (idParent, comment, user) => {
   try {
     const result = await prisma.tweet_comment.create({
       data: {
         id_tweet_parent: idParent,
         content: comment,
+        authorId: user,
       },
       select: { id: true },
     });
@@ -22,7 +23,12 @@ const getAllCommentsByIdTweet = async (idTweet) => {
   const result = await prisma.tweet_comment.findMany({
     where: { id_tweet_parent: idTweet },
     take: 10,
-    select: { id: true, content: true, createdAt: true },
+    select: {
+      id: true,
+      content: true,
+      createdAt: true,
+      authorId: true,
+    },
     orderBy: { createdAt: 'desc' },
   });
   return result;
