@@ -16,9 +16,11 @@ router.get('/', getTweets);
 router.get('/infinite/:cursor', isUrlParamInt, getInfiniteTweets);
 router.get('/:id', isUrlParamInt, getSingleTweet);
 
-router.post('/', hasUserLogin, addTweet);
-router.delete('/:idParent', isUrlParamInt, hasUserLogin, deleteTweet);
-router.patch('/:idParent/', isUrlParamInt, hasUserLogin, updateTweet);
-router.patch('/:idParent/:idChild', isUrlParamInt, hasUserLogin, updateTweet);
+router.use('/', hasUserLogin);
+
+router.post('/', addTweet);
+router.delete('/:idParent', isUrlParamInt, deleteTweet);
+router.patch('/:idParent', isUrlParamInt, updateTweet);
+router.patch('/:idParent/:idChild', isUrlParamInt, updateTweet);
 
 module.exports = router;

@@ -9,8 +9,9 @@ const hasUserLogin = require('../middlewares/hasUserLogin');
 const validateUser = require('../middlewares/validateUser');
 
 const router = Router();
+
 router.post('/register', validateUser(userValidationSchema), addUser);
-router.post('/login', loginUser);
+router.post('/login', validateUser(userValidationSchema), loginUser);
 router.get('/logout', hasUserLogin, logOutUser);
 
 module.exports = router;

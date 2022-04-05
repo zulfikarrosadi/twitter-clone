@@ -1,5 +1,5 @@
 const { createClient } = require('redis');
-const { ONE_HOUR } = require('../constant/config');
+const { EXP_TIME } = require('../constant/config');
 
 let redisClient;
 (async () => {
@@ -22,7 +22,7 @@ let redisClient;
 
 const createSession = async (key, data) => {
   await redisClient.set(key, JSON.stringify(data), {
-    EX: ONE_HOUR,
+    EX: EXP_TIME,
   });
 };
 

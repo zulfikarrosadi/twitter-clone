@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { userValidationErrorHandler } = require('../utils/userErrorHandler');
+const { mappingUserError } = require('../utils/userErrorHandler');
 
 const validate = (validations) => async (req, res, next) => {
   await Promise.all(validations.map((validation) => validation.run(req)));
@@ -8,11 +8,11 @@ const validate = (validations) => async (req, res, next) => {
   if (errors.isEmpty()) {
     return next();
   }
-  const errorResult = userValidationErrorHandler(errors);
+  const errorResult = mappingUserError(errors);
 
   return res
     .status(400)
-    .json({ timelapse: null, userId: null, errors: errorResult });
+    .json({ timelapse: null, user: null, errors: errorResult });
 };
 
 module.exports = validate;

@@ -19,15 +19,17 @@ const {
 } = require('../utils/tweetUtils');
 
 const addTweet = async (req, res) => {
-  upload(req, res, async (e) => {
-    const beforeTime = new Date().getTime();
-    const { tweets, user } = req.body;
+  const beforeTime = new Date().getTime();
 
-    const createOptions = tweetSaveValidation(tweets, req.files, user);
+  upload(req, res, async (e) => {
+    const { tweets } = req.body;
 
     try {
       if (e) throw e;
-      if (!tweets && !req.files) throw Error('tweet is null');
+      if (!tweets && req.files.length < 1) throw Error('tweet is null');
+
+      const { userId } = req.user;
+      const createOptions = tweetSaveValidation(tweets, req.files, userId);
 
       const result = await createTweet(createOptions);
       const timelapse = getTimelapse(beforeTime);
@@ -39,12 +41,12 @@ const addTweet = async (req, res) => {
         error: null,
       });
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       return res.status(400).json({
         timelapse: null,
         curosr: null,
         tweets: null,
-        error: errorHanlder(error),
+        error: errorHanlder(error.message),
       });
     }
   });
@@ -127,7 +129,6 @@ const getSingleTweet = async (req, res) => {
 };
 
 const deleteTweet = async (req, res) => {
-  const beforeTime = new Date().getTime();
   const id = parseInt(req.params.idParent, 10);
 
   try {
@@ -140,14 +141,7 @@ const deleteTweet = async (req, res) => {
     await deleteRelatedTweetChildAndTweetPhotos(id);
     await deleteTweetParentById(id);
 
-    const timelapse = getTimelapse(beforeTime);
-
-    return res.status(200).json({
-      timelapse: `${timelapse} ms`,
-      curosr: null,
-      tweets: { id },
-      error: null,
-    });
+    return res.status(204).send('deleted');
   } catch (error) {
     console.log(error);
     return res.status(404).json({
@@ -161,16 +155,18 @@ const deleteTweet = async (req, res) => {
 
 const updateTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
+
   const id = parseInt(req.params.idParent, 10);
   const idChild = parseInt(req.params.idChild, 10) || null;
+
   const { tweet } = req.body;
 
-  const updateOptions = tweetUpdateValidation(id, idChild, tweet);
   try {
+    if (!tweet) throw Error('Tweet cannot be empty');
+    const updateOptions = tweetUpdateValidation(id, idChild, tweet);
     const result = await updateTweetById(updateOptions);
 
-    const afterTime = new Date().getTime();
-    const timelapse = afterTime - beforeTime;
+    const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
@@ -184,7 +180,7 @@ const updateTweet = async (req, res) => {
       timelapse: null,
       curosr: null,
       tweets: null,
-      error: errorHanlder('Tweet not found'),
+      error: error.message,
     });
   }
 };

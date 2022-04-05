@@ -6,17 +6,16 @@
  */
 const uniqueConstraintErrorHandler = (e, body) => {
   const errors = [];
-  console.log(e);
-  if (e.split(' ').includes('`email_unique`')) {
+  if (e.split(' ').includes('`email`')) {
     errors.push({
       path: 'email',
       value: body.email,
       message: 'This email is already registered!',
     });
-  } else if (e.split(' ').includes('`username_unique`')) {
+  } else if (e.split(' ').includes('`username`')) {
     errors.push({
-      path: 'email',
-      value: body.email,
+      path: 'username',
+      value: body.username,
       message: 'This username is takken, please choose another username',
     });
   }
@@ -26,7 +25,7 @@ const uniqueConstraintErrorHandler = (e, body) => {
 /**
  * User Validation Error handler at Express level
  */
-const userValidationErrorHandler = (errors) => {
+const mappingUserError = (errors) => {
   const error = errors.array().map((e) => ({
     path: e.param,
     value: e.value,
@@ -37,5 +36,5 @@ const userValidationErrorHandler = (errors) => {
 
 module.exports = {
   uniqueConstraintErrorHandler,
-  userValidationErrorHandler,
+  mappingUserError,
 };

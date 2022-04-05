@@ -5,6 +5,9 @@ const errorHanlder = (error) => {
       errorMessage =
         'Your file format is not supported, please just upload file with png, jpg, or jpeg format';
       break;
+    case 'tweet is null':
+      errorMessage = 'You dont have anything to upload :D';
+      break;
     case 'Tweet not found':
       errorMessage = "Tweet that you're search for, is doesn't exists";
       break;

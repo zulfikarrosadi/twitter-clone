@@ -8,12 +8,13 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique @db.VarChar(150)
-  password     String         @db.VarChar(255)
-  username     String         @unique @db.VarChar(50)
-  createdAt    DateTime       @default(now()) @db.Timestamp(6)
-  tweet_parent tweet_parent[]
+  id            Int             @id @default(autoincrement())
+  email         String          @unique @db.VarChar(150)
+  password      String          @db.VarChar(255)
+  username      String          @unique @db.VarChar(50)
+  createdAt     DateTime        @default(now()) @db.Timestamp(6)
+  tweet_comment tweet_comment[]
+  tweet_parent  tweet_parent[]
 
   @@map("user")
 }
@@ -56,7 +57,10 @@ model tweet_comment {
   id_tweet_parent Int
   content         String       @db.VarChar(500)
   createdAt       DateTime     @default(now()) @map("created_at") @db.Timestamp(6)
+  authorId        Int
+  author          User         @relation(fields: [authorId], references: [id])
   tweet_parent    tweet_parent @relation(fields: [id_tweet_parent], references: [id])
 
+  @@index([authorId], name: "fk_user_comment")
   @@index([id_tweet_parent], name: "id_tweet_parent")
 }

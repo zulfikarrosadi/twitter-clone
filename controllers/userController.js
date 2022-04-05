@@ -1,7 +1,7 @@
 const { createUser, getUser } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const getTimelapse = require('../utils/timeUtil');
-const config = require('../constant/config');
+const { EXP_TIME } = require('../constant/config');
 const {
   verifyPassword,
   hashPassword,
@@ -22,30 +22,26 @@ const addUser = async (req, res) => {
     const hashedUserId = hashUserId(user.id);
 
     await createSession(hashedUserId, {
-      userId: user.id,
+      id: user.id,
       username: user.username,
     });
 
     const timelapse = getTimelapse(beforeTime);
-    const data = getSession(hashedUserId);
-    console.log(data);
+    const data = await getSession(hashedUserId);
 
     return res
       .status(200)
       .cookie('JERAWAT', hashedUserId, {
-        maxAge: config.ONE_HOUR,
+        maxAge: EXP_TIME,
         SameSite: 'Lax',
         httpOnly: true,
       })
       .json({
         timelapse: `${timelapse} ms`,
-        userId: user.id,
         error: null,
-        data,
+        user: JSON.parse(data),
       });
   } catch (error) {
-    console.log('catch', req.body);
-    console.log(error);
     return res.status(400).json({
       timelapse: null,
       userId: null,
@@ -74,7 +70,7 @@ const loginUser = async (req, res) => {
     return res
       .status(200)
       .cookie('JERAWAT', hashedUserId, {
-        maxAge: config.ONE_HOUR,
+        maxAge: EXP_TIME,
         SameSite: 'Lax',
         httpOnly: true,
       })

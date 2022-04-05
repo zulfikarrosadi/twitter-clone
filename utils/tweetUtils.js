@@ -1,12 +1,14 @@
 /**
  * validating user input to decide how the tweet is going to save on database
  * is the tweet has tweet_child? or user is provide the image file? etc
- * @param {tweet object} tweets
+ * @param {object} tweets
  * @param {Reqeust} files
- * @returns createOptionsObject
+ * @param {number} userId
+ * @returns
  */
-const tweetSaveValidation = (tweets, files, user) => {
-  const createOptions = { tweet: tweets, authorId: user };
+const tweetSaveValidation = (tweets, files, userId) => {
+  console.log(tweets, userId, files, 'from tweet save validation');
+  const createOptions = { tweet: tweets, authorId: userId };
 
   if (Array.isArray(tweets)) {
     createOptions.tweet = tweets.shift();
@@ -28,6 +30,7 @@ const tweetSaveValidation = (tweets, files, user) => {
       },
     };
   }
+  console.log(createOptions);
 
   return createOptions;
 };
