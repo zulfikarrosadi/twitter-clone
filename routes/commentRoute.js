@@ -6,8 +6,11 @@ const {
   deleteComment,
 } = require('../controllers/commentController');
 const hasUserLogin = require('../middlewares/hasUserLogin');
+const isUrlParamInt = require('../middlewares/validateUrlParam');
 
 const router = Router();
+
+router.use(isUrlParamInt);
 
 router.get('/:idTweet', getComments);
 router.get('/:idTweet/:cursor', getInfinteComment);

@@ -13,7 +13,7 @@ const hasUserLogin = async (req, res, next) => {
   if (!user) {
     return res
       .status(403)
-      .json({ message: 'You required to login to do this action' });
+      .json({ error: 'You required to login to do this action' });
   }
   req.user = JSON.parse(user);
   return next();

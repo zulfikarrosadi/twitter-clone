@@ -24,6 +24,6 @@ const upload = multer({
   storage,
   fileFilter,
   limits: { fileSize: 1 * 1024 * 1024 /* 1MB */ },
-}).array('tweetPhoto', 10);
+}).array('tweetPhotos', 10);
 
 module.exports = upload;
