@@ -30,7 +30,7 @@ const addUser = async (req, res) => {
     const data = await getSession(hashedUserId);
 
     return res
-      .status(200)
+      .status(201)
       .cookie('JERAWAT', hashedUserId, {
         maxAge: EXP_TIME,
         SameSite: 'Lax',
@@ -42,6 +42,7 @@ const addUser = async (req, res) => {
         user: JSON.parse(data),
       });
   } catch (error) {
+    console.log(error);
     return res.status(400).json({
       timelapse: null,
       userId: null,
@@ -51,6 +52,7 @@ const addUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
+  const beforeTime = new Date().getTime();
   const { email, password } = req.body;
   try {
     const user = await getUser(email);
@@ -61,11 +63,11 @@ const loginUser = async (req, res) => {
 
     const hashedUserId = hashUserId(user.id);
 
-    // store username and hashedUserId(as a key) in redis
     await createSession(hashedUserId, {
       userId: user.id,
       username: user.username,
     });
+    const timelapse = getTimelapse(beforeTime);
 
     return res
       .status(200)
@@ -74,7 +76,11 @@ const loginUser = async (req, res) => {
         SameSite: 'Lax',
         httpOnly: true,
       })
-      .json({ message: 'ok', username: user.username });
+      .json({
+        timelapse: `${timelapse} ms`,
+        error: null,
+        user: { id: user.id, username: user.username },
+      });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

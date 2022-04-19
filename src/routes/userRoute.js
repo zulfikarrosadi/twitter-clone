@@ -12,6 +12,6 @@ const router = Router();
 
 router.post('/register', validateUser(userValidationSchema), addUser);
 router.post('/login', validateUser(userValidationSchema), loginUser);
-router.get('/logout', hasUserLogin, logOutUser);
+router.post('/logout', hasUserLogin, logOutUser);
 
 module.exports = router;
