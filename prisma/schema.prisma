@@ -13,6 +13,7 @@ model User {
   password      String          @db.VarChar(255)
   username      String          @unique @db.VarChar(50)
   createdAt     DateTime        @default(now()) @db.Timestamp(6)
+  avatar        String?         @db.VarChar(255)
   tweet_comment tweet_comment[]
   tweet_parent  tweet_parent[]
 
