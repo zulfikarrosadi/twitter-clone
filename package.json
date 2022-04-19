@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "test": "mocha",
+    "coverage-test": "nyc --reporter=text mocha --timeout=5000ms --exit"
   },
   "keywords": [],
   "author": "",
