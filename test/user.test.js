@@ -2,27 +2,10 @@
 const supertest = require('supertest');
 const { expect } = require('chai');
 const { PrismaClient } = require('@prisma/client');
+const { invalidUser, newUser, validUser } = require('./helper');
 
 const prisma = new PrismaClient();
 const request = supertest('http://localhost:3000');
-
-const newUser = {
-  email: `testemail${Math.floor(Math.random() * 1000)}@test.com`,
-  password: 'password',
-  username: `testusername${Math.floor(Math.random() * 1000)}`,
-};
-
-const validUser = {
-  email: 'test@email.com',
-  username: 'testusername',
-  password: 'testingemail',
-};
-
-const invalidUser = {
-  email: 'test@email.com',
-  username: 'testusername',
-  password: 'invalidUser',
-};
 
 describe('E2E User Endpoint', () => {
   describe('POST /users/register', () => {
