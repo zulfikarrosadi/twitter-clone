@@ -1,3 +1,6 @@
+Priorities:
+  32, 29, 28, 22
+
 Good Read:
   1. Prisma$use (middleware on hook)
 
@@ -20,9 +23,24 @@ features:
       the parent tweet and, the rest is for the tweet child                                                   UNDER CONSTRUCTION
   16. add prettierrc to configure trailing coma, operator
   17. create custom error instance and fix error feedback
-  18. create schema for success feedback
+  18. create schema for success feedback                             UNNECESSARY
   19. user can add image description (alt text)               UNDER CONSTRUCTION
   20. ability to add comment                                                DONE
+  21. make 404 page                                                         DONE
+  22. create functional test
+  23. only receive tweet from form data not from body                       DONE
+  24. handle when user not login and try to do things that required login   DONE
+  25. soft delete for tweet image, and make schedulers to delete file
+      monthly that marked as deleted                          UNDER CONSTRUCTION
+  26. upload avatar / auto generated                          UNDER CONSTRUCTION
+      how to make multer can upload in 2 places
+  27. update user profile
+  28. Make response and request schema docs                   UNDER CONSTRUCTION
+  29. Create TweetRequestError error instance and remove errorHandler function
+  30. Implement ValidateUrlParam in comment routes                          DONE
+  31. fix the failed response on tweet docs 
+      (add the 400 url invalid error response)
+  32. re-organize project folder, move to src folder
 
 bug:
   1. DONE 

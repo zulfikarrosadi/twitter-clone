@@ -2,9 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
-const tweetRoutes = require('./routes/tweetRoute');
-const commentRoutes = require('./routes/commentRoute');
-const userRoutes = require('./routes/userRoute');
+const tweetRoutes = require('./src/routes/tweetRoute');
+const commentRoutes = require('./src/routes/commentRoute');
+const userRoutes = require('./src/routes/userRoute');
 
 const app = express();
 
