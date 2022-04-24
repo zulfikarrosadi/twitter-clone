@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id            Int             @id @default(autoincrement())
-  email         String          @unique @db.VarChar(150)
-  password      String          @db.VarChar(255)
-  username      String          @unique @db.VarChar(50)
-  createdAt     DateTime        @default(now()) @db.Timestamp(6)
-  avatar        String?         @db.VarChar(255)
-  tweet_comment tweet_comment[]
-  tweet_parent  tweet_parent[]
+  id                 Int             @id @default(autoincrement())
+  email              String          @unique @db.VarChar(150)
+  password           String          @db.VarChar(255)
+  username           String          @unique @db.VarChar(50)
+  createdAt          DateTime        @default(now()) @db.Timestamp(6)
+  avatar             String?         @db.VarChar(255)
+  date_of_birth      DateTime        @default(now()) @db.Timestamp(6)
+  is_username_edited Boolean         @default(false)
+  tweet_comment      tweet_comment[]
+  tweet_parent       tweet_parent[]
 
   @@map("user")
 }
