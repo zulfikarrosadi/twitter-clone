@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon app",
     "lint": "eslint ./",
-    "test": "mocha",
+    "test": "mocha --timeout=5000ms --exit",
     "coverage-test": "nyc --reporter=text mocha --timeout=5000ms --exit"
   },
   "keywords": [],
