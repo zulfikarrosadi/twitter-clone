@@ -16,4 +16,8 @@ module.exports = {
     username: 'testusername',
     password: 'invalidUser',
   },
+
+  newTweet: {
+    tweets: ['tweet parent test', 'tweet child test'],
+  },
 };
