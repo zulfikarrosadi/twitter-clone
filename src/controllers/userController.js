@@ -1,4 +1,8 @@
-const { createUser, getUser } = require('../services/userService');
+const {
+  createUser,
+  getUser,
+  getUserSettingsService,
+} = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const getTimelapse = require('../utils/timeUtil');
 const { EXP_TIME } = require('../constant/config');
@@ -12,6 +16,7 @@ const {
   getSession,
   deleteSession,
 } = require('../services/redisService');
+const { RequestError } = require('../errors/RequestError');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -99,8 +104,25 @@ const logOutUser = async (req, res) => {
   }
 };
 
+const getUserSettings = async (req, res) => {
+  try {
+    const userSettings = await getUserSettingsService(req.user.userId);
+
+    if (userSettings.is_username_edited) delete userSettings.username;
+    delete userSettings.is_username_edited;
+
+    return res.status(200).json(userSettings);
+  } catch (error) {
+    return res.status(400).json({ message: 'something went wrong, try again' });
+  }
+};
+
+const updateUserSettings = async (req, res) => {};
+
 module.exports = {
   addUser,
   loginUser,
   logOutUser,
+  getUserSettings,
+  updateUserSettings,
 };

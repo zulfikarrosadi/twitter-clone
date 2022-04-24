@@ -22,4 +22,17 @@ const getUser = async (email) => {
   return result;
 };
 
-module.exports = { createUser, getUser };
+const getUserSettingsService = async (userId) => {
+  const result = prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      username: true,
+      avatar: true,
+      is_username_edited: true,
+      date_of_birth: true,
+    },
+  });
+  return result;
+};
+
+module.exports = { createUser, getUser, getUserSettingsService };
