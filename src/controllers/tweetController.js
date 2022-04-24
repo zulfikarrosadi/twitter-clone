@@ -17,6 +17,7 @@ const {
   tweetUpdateValidation,
   getCursor,
 } = require('../utils/tweetUtils');
+const { RequestError } = require('../errors/RequestError');
 
 const addTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -162,7 +163,7 @@ const updateTweet = async (req, res) => {
   const { tweet } = req.body;
 
   try {
-    if (!tweet) throw Error('Tweet cannot be empty');
+    if (!tweet) throw new RequestError('Tweet cannot be empty', 400);
     const updateOptions = tweetUpdateValidation(id, idChild, tweet);
     const result = await updateTweetById(updateOptions);
 
@@ -176,11 +177,12 @@ const updateTweet = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(404).json({
+
+    return res.status(error.code || 400).json({
       timelapse: null,
       curosr: null,
       tweets: null,
-      error: error.message,
+      error: error.message || "Tweet that you're search for, is doesn't exists",
     });
   }
 };
