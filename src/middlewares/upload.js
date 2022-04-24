@@ -2,7 +2,15 @@ const multer = require('multer');
 const path = require('path');
 
 const storage = multer.diskStorage({
-  destination: path.join(__dirname, '../public/uploads/images'),
+  destination: (req, file, cb) => {
+    let dir;
+    if (file.fieldname === 'tweetPhotos') {
+      dir = path.join(__dirname, '../../public/uploads/images');
+    } else if (file.fieldname === 'avatars') {
+      dir = path.join(__dirname, '../../public/uploads/avatars');
+    }
+    cb(null, dir);
+  },
   filename: (req, file, cb) => {
     const uniqueSuffix = Math.floor(Math.random() * 123456789);
     cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`);
@@ -20,10 +28,8 @@ const fileFilter = (req, file, cb) => {
   return cb('INVALID_FILE_FORMAT', false);
 };
 
-const upload = multer({
+module.exports = multer({
   storage,
   fileFilter,
   limits: { fileSize: 1 * 1024 * 1024 /* 1MB */ },
-}).array('tweetPhotos', 10);
-
-module.exports = upload;
+});
