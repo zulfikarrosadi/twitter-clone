@@ -1,4 +1,3 @@
-const upload = require('../middlewares/upload');
 const deleteMultipleFiles = require('../utils/fileUtil');
 const errorHanlder = require('../utils/errorHanlder');
 const getTimelapse = require('../utils/timeUtil');
@@ -18,9 +17,12 @@ const {
   getCursor,
 } = require('../utils/tweetUtils');
 const { RequestError } = require('../errors/RequestError');
+const multer = require('../middlewares/upload');
+const { MAX_FILE_ITEM } = require('../constant/config');
 
 const addTweet = async (req, res) => {
   const beforeTime = new Date().getTime();
+  const upload = multer.array('tweetPhotos', MAX_FILE_ITEM);
 
   upload(req, res, async (e) => {
     const { tweets } = req.body;
