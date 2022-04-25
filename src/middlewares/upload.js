@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
     let dir;
     if (file.fieldname === 'tweetPhotos') {
       dir = path.join(__dirname, '../../public/uploads/images');
-    } else if (file.fieldname === 'avatars') {
+    } else if (file.fieldname === 'avatar') {
       dir = path.join(__dirname, '../../public/uploads/avatars');
     }
     cb(null, dir);
