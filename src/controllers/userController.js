@@ -110,9 +110,6 @@ const getUserSettings = async (req, res) => {
   try {
     const userSettings = await getUserSettingsService(req.user.userId);
 
-    if (userSettings.is_username_edited) delete userSettings.username;
-    delete userSettings.is_username_edited;
-
     return res.status(200).json(userSettings);
   } catch (error) {
     return res.status(400).json({ message: 'something went wrong, try again' });
