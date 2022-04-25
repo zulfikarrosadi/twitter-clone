@@ -2,6 +2,7 @@ const {
   createUser,
   getUser,
   getUserSettingsService,
+  updateUserSettingsService,
 } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const getTimelapse = require('../utils/timeUtil');
@@ -17,6 +18,7 @@ const {
   deleteSession,
 } = require('../services/redisService');
 const { RequestError } = require('../errors/RequestError');
+const multer = require('../middlewares/upload');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -117,7 +119,46 @@ const getUserSettings = async (req, res) => {
   }
 };
 
-const updateUserSettings = async (req, res) => {};
+const updateUserSettings = async (req, res) => {
+  const beforeTime = new Date().getTime();
+  const upload = multer.single('avatar');
+
+  upload(req, res, async (e) => {
+    const { username, dateOfBirth } = req.body;
+    const { userId, username: oldUsername } = req.user;
+    const { JERAWAT } = req.cookies;
+    const isUsernameEdited = username !== oldUsername;
+    let avatar;
+
+    try {
+      if (e) throw e;
+      if (!username && !dateOfBirth) throw Error('settings is null');
+      if (!req.file) avatar = null;
+      else avatar = req.file.filename;
+      if (isUsernameEdited) {
+        await createSession(JERAWAT, { userId, username });
+      }
+
+      await updateUserSettingsService(
+        userId,
+        username,
+        avatar,
+        dateOfBirth,
+        isUsernameEdited,
+      );
+      const timelapse = getTimelapse(beforeTime);
+
+      return res
+        .status(200)
+        .json({ timelapse: `${timelapse} ms`, error: null });
+    } catch (error) {
+      return res.status(400).json({
+        timelapse: null,
+        error: error.message,
+      });
+    }
+  });
+};
 
 module.exports = {
   addUser,
