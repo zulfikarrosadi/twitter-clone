@@ -4,3 +4,4 @@ docs
 .env
 *.log
 .nyc_output
+public/uploads
