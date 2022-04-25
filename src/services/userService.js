@@ -35,4 +35,28 @@ const getUserSettingsService = async (userId) => {
   return result;
 };
 
-module.exports = { createUser, getUser, getUserSettingsService };
+const updateUserSettingsService = async (
+  userId,
+  username,
+  avatar,
+  dateOfBirth,
+  isUsernameEdited,
+) => {
+  const result = await prisma.user.update({
+    where: { id: userId },
+    data: {
+      avatar,
+      username,
+      date_of_birth: dateOfBirth,
+      is_username_edited: isUsernameEdited,
+    },
+  });
+  return result;
+};
+
+module.exports = {
+  createUser,
+  getUser,
+  getUserSettingsService,
+  updateUserSettingsService,
+};
