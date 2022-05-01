@@ -122,9 +122,8 @@ const updateUserSettings = async (req, res) => {
 
   upload(req, res, async (e) => {
     const { username, dateOfBirth } = req.body;
-    const { userId, username: oldUsername } = req.user;
+    const { userId } = req.user;
     const { JERAWAT } = req.cookies;
-    const isUsernameEdited = username !== oldUsername;
     let avatar;
 
     try {
@@ -132,17 +131,9 @@ const updateUserSettings = async (req, res) => {
       if (!username && !dateOfBirth) throw Error('settings is null');
       if (!req.file) avatar = null;
       else avatar = req.file.filename;
-      if (isUsernameEdited) {
-        await createSession(JERAWAT, { userId, username });
-      }
 
-      await updateUserSettingsService(
-        userId,
-        username,
-        avatar,
-        dateOfBirth,
-        isUsernameEdited,
-      );
+      await updateUserSettingsService(userId, username, avatar, dateOfBirth);
+      await createSession(JERAWAT, { userId, username });
       const timelapse = getTimelapse(beforeTime);
 
       return res

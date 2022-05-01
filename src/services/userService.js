@@ -28,7 +28,6 @@ const getUserSettingsService = async (userId) => {
     select: {
       username: true,
       avatar: true,
-      is_username_edited: true,
       date_of_birth: true,
     },
   });
@@ -40,7 +39,6 @@ const updateUserSettingsService = async (
   username,
   avatar,
   dateOfBirth,
-  isUsernameEdited,
 ) => {
   const result = await prisma.user.update({
     where: { id: userId },
@@ -48,7 +46,6 @@ const updateUserSettingsService = async (
       avatar,
       username,
       date_of_birth: dateOfBirth,
-      is_username_edited: isUsernameEdited,
     },
   });
   return result;
