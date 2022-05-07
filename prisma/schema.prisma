@@ -18,42 +18,37 @@ model tweetParent {
   tweet_comment tweetComment[]
   tweet_photos  tweetPhoto[]
 
-  @@index([authorId], name: "fk_tweet_parent_user")
   @@map("tweet_parents")
 }
 
 model tweetChild {
-  id              Int         @id @default(autoincrement())
-  tweet           String      @db.VarChar(140)
-  id_tweet_parent Int
-  tweet_parent    tweetParent @relation(fields: [id_tweet_parent], references: [id])
+  id            Int         @id @default(autoincrement())
+  tweet         String      @db.VarChar(140)
+  idTweetParent Int         @map("id_tweet_parent")
+  tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
-  @@index([id_tweet_parent], name: "fk_parent_child")
   @@map("tweet_childs")
 }
 
 model tweetPhoto {
-  id              Int         @id @default(autoincrement())
-  id_tweet_parent Int
-  images          String?     @db.VarChar(255)
-  description     String?     @db.VarChar(255)
-  tweet_parent    tweetParent @relation(fields: [id_tweet_parent], references: [id])
+  id            Int         @id @default(autoincrement())
+  idTweetParent Int         @map("id_tweet_parent")
+  images        String?     @db.VarChar(255)
+  description   String?     @db.VarChar(255)
+  tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
-  @@index([id_tweet_parent], name: "fk_tweet_parent")
   @@map("tweet_photos")
 }
 
 model tweetComment {
-  id              Int         @id @default(autoincrement())
-  id_tweet_parent Int
-  content         String      @db.VarChar(500)
-  createdAt       DateTime    @default(now()) @map("created_at") @db.Timestamp(6)
-  authorId        Int
-  user            user        @relation(fields: [authorId], references: [id])
-  tweet_parent    tweetParent @relation(fields: [id_tweet_parent], references: [id])
+  id            Int         @id @default(autoincrement())
+  idTweetParent Int         @map("id_tweet_parent")
+  content       String      @db.VarChar(500)
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamp(6)
+  authorId      Int
+  user          user        @relation(fields: [authorId], references: [id])
+  tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
-  @@index([authorId], name: "fk_user_comment")
-  @@index([id_tweet_parent], name: "id_tweet_parent")
   @@map("tweet_comments")
 }
 
@@ -66,32 +61,30 @@ model gender {
 }
 
 model user {
-  id               Int            @id @default(autoincrement())
-  name             String         @db.VarChar(70)
-  bio              String?        @db.VarChar(255)
-  website          String?        @db.VarChar(255)
-  created_at       DateTime       @default(now()) @db.Timestamp(6)
-  avatar           String?        @db.VarChar(255)
-  banner           String?        @db.VarChar(255)
-  user_settings_id Int
-  user_settings    userSetting    @relation(fields: [user_settings_id], references: [id])
-  tweet_comment    tweetComment[]
-  tweet_parent     tweetParent[]
+  id            Int            @id @default(autoincrement())
+  name          String         @db.VarChar(70)
+  bio           String?        @db.VarChar(255)
+  website       String?        @db.VarChar(255)
+  createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
+  avatar        String?        @db.VarChar(255)
+  banner        String?        @db.VarChar(255)
+  userSettingId Int            @map("user_setting_id")
+  user_settings userSetting    @relation(fields: [userSettingId], references: [id])
+  tweet_comment tweetComment[]
+  tweet_parent  tweetParent[]
 
-  @@index([user_settings_id], name: "user_settings_id")
   @@map("users")
 }
 
 model userSetting {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique @db.VarChar(50)
-  email      String   @unique @db.VarChar(150)
-  password   String   @db.VarChar(255)
-  genders_id Int      @default(0)
-  date_birth DateTime @default(now()) @db.Timestamp(6)
-  genders    gender   @relation(fields: [genders_id], references: [id])
-  user       user[]
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(50)
+  email     String   @unique @db.VarChar(150)
+  password  String   @db.VarChar(255)
+  genderId  Int      @default(0) @map("gender_id")
+  dateBirth DateTime @default(now()) @map("date_birth") @db.Timestamp(6)
+  genders   gender   @relation(fields: [genderId], references: [id])
+  user      user[]
 
-  @@index([genders_id], name: "genders_id")
   @@map("user_settings")
 }
