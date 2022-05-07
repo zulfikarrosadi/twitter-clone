@@ -2,58 +2,117 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const createUser = async (email, password, username) => {
-  const result = await prisma.user.create({
-    data: { email, password, username },
+const createUserSettings = async (
+  username,
+  email,
+  password,
+  genderId,
+  dateOfBirth,
+) => {
+  const result = await prisma.userSetting.create({
+    data: {
+      email,
+      password,
+      username,
+      genderId,
+      dateBirth: dateOfBirth,
+    },
+    select: { id: true, username: true },
   });
   return result;
 };
 
-const getUser = async (email) => {
-  const result = await prisma.user.findUnique({
-    where: { email },
-    select: {
-      id: true,
-      email: true,
-      username: true,
-      password: true,
+const createUserProfile = async (name, bio, website, userSettingId) => {
+  const result = await prisma.user.create({
+    data: {
+      name,
+      bio,
+      website,
+      user_settings: { connect: { id: userSettingId } },
     },
   });
   return result;
 };
 
-const getUserSettingsService = async (userId) => {
-  const result = prisma.user.findUnique({
-    where: { id: userId },
+const getUserProfileService = async (id) => {
+  const result = await prisma.user.findUnique({
+    where: { id },
     select: {
-      username: true,
+      id: true,
+      name: true,
+      bio: true,
+      website: true,
+      createdAt: true,
       avatar: true,
-      date_of_birth: true,
+      banner: true,
+      userSettingId: true,
+    },
+  });
+  return result;
+};
+
+const updateUserProfileService = async (
+  id,
+  name,
+  bio,
+  website,
+  avatar,
+  banner,
+) => {
+  const result = await prisma.user.update({
+    where: { id },
+    data: {
+      name,
+      bio,
+      website,
+      avatar,
+      banner,
+    },
+  });
+
+  return result;
+};
+
+const getUserSettingsService = async (id) => {
+  const result = prisma.userSetting.findUnique({
+    where: { id },
+    include: {
+      genders: {
+        select: {
+          name: true,
+        },
+      },
     },
   });
   return result;
 };
 
 const updateUserSettingsService = async (
-  userId,
+  id,
   username,
-  avatar,
+  email,
+  password,
   dateOfBirth,
+  genderId,
 ) => {
-  const result = await prisma.user.update({
-    where: { id: userId },
+  const result = await prisma.userSetting.update({
+    where: { id },
     data: {
-      avatar,
       username,
-      date_of_birth: dateOfBirth,
+      email,
+      password,
+      dateBirth: dateOfBirth,
+      genderId,
     },
   });
   return result;
 };
 
 module.exports = {
-  createUser,
-  getUser,
+  createUserProfile,
+  createUserSettings,
+  getUserProfileService,
+  updateUserProfileService,
   getUserSettingsService,
   updateUserSettingsService,
 };
