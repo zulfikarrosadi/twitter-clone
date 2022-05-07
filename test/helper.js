@@ -20,4 +20,7 @@ module.exports = {
   newTweet: {
     tweets: ['tweet parent test', 'tweet child test'],
   },
+
+  validUserProfile: ['zulfikar', 'bio testing', 'https://zulfikar.com'],
+  validUpdatedUserProfile: ['rosadi', 'bio update', 'https://rosadi.com'],
 };
