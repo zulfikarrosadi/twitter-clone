@@ -48,7 +48,7 @@ describe.only('User Service', () => {
 
     describe('get user settings', () => {
       it('should get user settings', async () => {
-        const result = await getUserSettingsService(userSettings.id);
+        const result = await getUserSettingsService(userSettings.username);
 
         expect(result.username).to.be.equal('zulfikarr');
         expect(result.email).to.be.equal('zulfikar@test.com');
@@ -98,6 +98,17 @@ describe.only('User Service', () => {
       it('should create new user profile', async () => {
         result = await createUserProfile(...validUserProfile, userSettings.id);
         expect(result.name).to.be.equal('zulfikar');
+      });
+      describe('given null input execpt for name data', () => {
+        it('should return no error', async () => {
+          const res = await createUserProfile(
+            'some name',
+            null,
+            null,
+            userSettings.id,
+          );
+          expect(res.name).to.be.equal('some name');
+        });
       });
     });
 
