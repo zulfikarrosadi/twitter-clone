@@ -16,7 +16,7 @@ const { validUserProfile, validUpdatedUserProfile } = require('./helper');
 
 const prisma = new PrismaClient();
 
-describe.only('User Service', () => {
+describe('User Service', () => {
   describe('user settings', () => {
     let userSettings;
     beforeEach(async () => {
@@ -29,6 +29,7 @@ describe.only('User Service', () => {
       );
     });
     afterEach(async () => {
+      await prisma.user.deleteMany();
       await prisma.userSetting.deleteMany();
     });
 
