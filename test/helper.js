@@ -1,14 +1,17 @@
 module.exports = {
   newUser: {
-    email: `testemail${Math.floor(Math.random() * 1000)}@test.com`,
+    email: 'testemail@test.com',
     password: 'password',
-    username: `testusername${Math.floor(Math.random() * 1000)}`,
+    username: 'testusername',
+    dateOfBirth: new Date(),
+    genderId: 1,
+    name: 'test name',
   },
 
   validUser: {
-    email: 'test@email.com',
+    email: 'testemail@test.com',
     username: 'testusername',
-    password: 'testingemail',
+    password: 'password',
   },
 
   invalidUser: {
