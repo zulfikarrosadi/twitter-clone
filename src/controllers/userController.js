@@ -1,8 +1,8 @@
 const {
-  createUser,
-  getUser,
   getUserSettingsService,
   updateUserSettingsService,
+  createUserProfile,
+  createUserSettings,
 } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const getTimelapse = require('../utils/timeUtil');
@@ -22,15 +22,23 @@ const multer = require('../middlewares/upload');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const { email, password, username } = req.body;
+  const { email, password, username, dateOfBirth, genderId, name } = req.body;
   try {
     const hashedPassword = await hashPassword(password);
-    const user = await createUser(email, hashedPassword, username);
-    const hashedUserId = hashUserId(user.id);
+    const userSettings = await createUserSettings(
+      username,
+      email,
+      hashedPassword,
+      genderId,
+      dateOfBirth,
+    );
+    await createUserProfile(name, null, null, userSettings.id);
+
+    const hashedUserId = hashUserId(userSettings.id);
 
     await createSession(hashedUserId, {
-      id: user.id,
-      username: user.username,
+      id: userSettings.id,
+      username: userSettings.username,
     });
 
     const timelapse = getTimelapse(beforeTime);
@@ -60,9 +68,9 @@ const addUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const { email, password } = req.body;
+  const { username, password } = req.body;
   try {
-    const user = await getUser(email);
+    const user = await getUserSettingsService(username);
     if (!user) throw new Error('No user email');
 
     const isVerified = await verifyPassword(password, user.password);
@@ -108,7 +116,7 @@ const logOutUser = async (req, res) => {
 
 const getUserSettings = async (req, res) => {
   try {
-    const userSettings = await getUserSettingsService(req.user.userId);
+    const userSettings = await getUserSettingsService(req.user.username);
 
     return res.status(200).json(userSettings);
   } catch (error) {
