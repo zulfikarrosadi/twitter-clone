@@ -20,9 +20,8 @@ describe('E2E User Endpoint', () => {
       expect(response.header).to.have.property('set-cookie');
 
       after(async () => {
-        await prisma.user.delete({
-          where: { username: newUser.username },
-        });
+        await prisma.user.deleteMany();
+        await prisma.userSetting.deleteMany();
       });
     });
 
