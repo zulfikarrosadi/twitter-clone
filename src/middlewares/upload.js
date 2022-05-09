@@ -8,6 +8,8 @@ const storage = multer.diskStorage({
       dir = path.join(__dirname, '../../public/uploads/images');
     } else if (file.fieldname === 'avatar') {
       dir = path.join(__dirname, '../../public/uploads/avatars');
+    } else if (file.fieldname === 'banner') {
+      dir = path.join(__dirname, '../../public/uploads/banners');
     }
     cb(null, dir);
   },
