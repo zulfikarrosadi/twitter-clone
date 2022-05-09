@@ -6,6 +6,8 @@ const {
   logOutUser,
   getUserSettings,
   updateUserSettings,
+  updateUserProfile,
+  updateUserPassword,
 } = require('../controllers/userController');
 const hasUserLogin = require('../middlewares/hasUserLogin');
 const validateUser = require('../middlewares/validateUser');
@@ -19,6 +21,8 @@ router.use(hasUserLogin);
 
 router.post('/logout', logOutUser);
 router.get('/settings', getUserSettings);
-router.post('/settings', updateUserSettings);
+router.patch('/settings/information', updateUserSettings);
+router.patch('/settings/password', updateUserPassword);
+router.patch('/profile', updateUserProfile);
 
 module.exports = router;
