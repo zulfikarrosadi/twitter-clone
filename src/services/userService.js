@@ -77,6 +77,11 @@ const getUserSettingsService = async (username) => {
   const result = prisma.userSetting.findUnique({
     where: { username },
     include: {
+      user: {
+        select: {
+          id: true,
+        },
+      },
       genders: {
         select: {
           name: true,
@@ -84,6 +89,7 @@ const getUserSettingsService = async (username) => {
       },
     },
   });
+  console.log(result);
   return result;
 };
 
@@ -91,7 +97,6 @@ const updateUserSettingsService = async (
   id,
   username,
   email,
-  password,
   dateOfBirth,
   genderId,
 ) => {
@@ -100,11 +105,19 @@ const updateUserSettingsService = async (
     data: {
       username,
       email,
-      password,
       dateBirth: dateOfBirth,
       genderId,
     },
   });
+  return result;
+};
+
+const updateUserPasswordService = async (username, newPassword) => {
+  const result = await prisma.userSetting.update({
+    where: { username },
+    data: { password: newPassword },
+  });
+
   return result;
 };
 
@@ -115,4 +128,5 @@ module.exports = {
   updateUserProfileService,
   getUserSettingsService,
   updateUserSettingsService,
+  updateUserPasswordService,
 };
