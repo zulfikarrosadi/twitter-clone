@@ -61,7 +61,7 @@ const getComments = async (req, res) => {
       timelapse: null,
       cursor: null,
       comment: null,
-      error: errorHanlder(error.message),
+      error: error.message,
     });
   }
 };
