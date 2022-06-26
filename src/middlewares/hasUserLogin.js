@@ -11,9 +11,12 @@ const hasUserLogin = async (req, res, next) => {
 
   const user = await getSession(JERAWAT);
   if (!user) {
-    return res
-      .status(403)
-      .json({ error: 'You required to login to do this action' });
+    return res.status(403).json({
+      timelapse: null,
+      cursor: null,
+      tweets: null,
+      error: 'You required to login to do this action',
+    });
   }
   req.user = JSON.parse(user);
   return next();
