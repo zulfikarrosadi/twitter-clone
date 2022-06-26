@@ -7,6 +7,7 @@ const {
   deleteCommentById,
 } = require('../services/commentService');
 const getTimelapse = require('../utils/timeUtil');
+const { RequestError } = require('../errors/RequestError');
 
 const addComment = async (req, res) => {
   const beforeTime = new Date().getTime();
@@ -45,7 +46,7 @@ const getComments = async (req, res) => {
   const idTweet = parseInt(req.params.idTweet, 10);
   try {
     const result = await getAllCommentsByIdTweet(idTweet);
-    if (!result.length) throw Error('Comment not found');
+    if (!result.length) throw RequestError('Comment not found', 404);
 
     const timelapse = getTimelapse(beforeTime);
 
