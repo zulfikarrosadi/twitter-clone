@@ -168,7 +168,7 @@
 					tweets: null
 					error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-- `PATCH /tweets/:idParent` update the parent tweet *
+- `PATCH /tweets/:idParent` update the parent tweet * ^^
 	Request
 		param:
 			idParent:
@@ -211,7 +211,7 @@
 						tweets: null
 						error: 'You required to login to do this action'
 
-- `PATCH /tweets/:idParent/:idChild` update the parent tweet *
+- `PATCH /tweets/:idParent/:idChild` update the parent tweet * ^^
 	Request
 		param:
 			idParent:
@@ -247,7 +247,7 @@
 					error: 'Tweet that you're search for, is doesn't exists'
 
 ## Comment
-- `GET /tweets/comments/:idTweet` Get 10 first comment
+- `GET /tweets/comments/:idTweet` Get 10 first comment ^^
 	Request
 		param:
 			idTweet:
