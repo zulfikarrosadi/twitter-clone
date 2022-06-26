@@ -1,5 +1,3 @@
-const errorHandler = require('../utils/errorHanlder');
-
 const isUrlParamInt = (req, res, next) => {
   let isNumber = true;
   Object.keys(req.params).forEach((key) => {
@@ -12,7 +10,7 @@ const isUrlParamInt = (req, res, next) => {
       timelapse: null,
       curosr: null,
       tweets: null,
-      error: errorHandler('Request Url Invalid'),
+      error: 'Your URL is invalid, please double check it :D',
     });
   }
   return next();
