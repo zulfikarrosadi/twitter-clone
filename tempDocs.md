@@ -2,7 +2,7 @@
 ^^ fixed schema
 
 ## Tweet
-`GET /tweets/` Get All Tweets ^^
+- `GET /tweets/` Get All Tweets ^^
 	Request
 		param: no
 		body: no
@@ -38,7 +38,7 @@
 					tweets: null,
 					error: 'Tweet that you're search for, is doesn't exists'
 
-`GET /tweets/infinite/:cursor` Get Infinite Tweets ^^
+- `GET /tweets/infinite/:cursor` Get Infinite Tweets ^^
 	Request
 		param:
 			cursor:
@@ -57,7 +57,7 @@
 		failed:
 			status code: 404
 				type: json
-				schema: 
+				schema:
 					timelapse: null
 					cursor: null
 					tweets: null
@@ -70,7 +70,7 @@
 					tweets: null
 					error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-`GET /tweets/:id` Get single tweet ^^
+- `GET /tweets/:id` Get single tweet ^^
 	Request:
 		param:
 			id:
@@ -102,7 +102,7 @@
 					tweets: null
 					error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-`POST /tweets` Post new twees * ^^
+- `POST /tweets` Post new twees * ^^
 	Request:
 		param: no
 		body:
@@ -118,7 +118,7 @@
 						timelapse: time
 						cursor: null
 						tweets: id tweet
-						error: null	
+						error: null
 			failed
 				status code: 400
 					type: json
@@ -135,7 +135,7 @@
 							tweets: null
 							error: 'You required to login to do this action'
 
-`DELETE /tweets/:idParent` deleting tweet parent * ^^
+- `DELETE /tweets/:idParent` deleting tweet parent * ^^
 	Request
 		param:
 			idParent:
@@ -168,7 +168,7 @@
 					tweets: null
 					error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-`PATCH /tweets/:idParent` update the parent tweet *
+- `PATCH /tweets/:idParent` update the parent tweet *
 	Request
 		param:
 			idParent:
@@ -187,7 +187,7 @@
 					timelapse: time
 					cursor: null
 					tweets: id tweet
-					error: null	
+					error: null
 		failed:
 			status code: 400
 				type: json
@@ -211,7 +211,7 @@
 						tweets: null
 						error: 'You required to login to do this action'
 
-`PATCH /tweets/:idParent/:idChild` update the parent tweet *
+- `PATCH /tweets/:idParent/:idChild` update the parent tweet *
 	Request
 		param:
 			idParent:
@@ -229,7 +229,7 @@
 					timelapse: time
 					cursor: null
 					tweets: id tweet
-					error: null	
+					error: null
 		failed:
 			status code: 400
 				type: json
@@ -247,7 +247,7 @@
 					error: 'Tweet that you're search for, is doesn't exists'
 
 ## Comment
-`GET /tweets/comments/:idTweet` Get 10 first comment
+- `GET /tweets/comments/:idTweet` Get 10 first comment
 	Request
 		param:
 			idTweet:
@@ -284,7 +284,7 @@
 						comment: null,
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-`GET /tweets/comments/:idTweet/:cursor` Get the next 10 comment
+- `GET /tweets/comments/:idTweet/:cursor` Get the next 10 comment
 	Request
 		param:
 			idTweet:
@@ -323,7 +323,7 @@
 						comment: null,
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-`POST /tweets/comments/` Post new comment *
+- `POST /tweets/comments/` Post new comment *
 	Request
 		param: no
 		body:
@@ -348,9 +348,9 @@
 					comment: null
 					error: "Upss... Somethings wrong, please try again :D"
 
-`DELETE /tweets/comments/:idComment` Delete comment *
+- `DELETE /tweets/comments/:idComment` Delete comment *
 	Request
-		param: 
+		param:
 			idComment:
 				type: int
 				description: id comment that will be deleted
@@ -374,7 +374,7 @@
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
 ## User
-`POST \users\register` register and create new user session
+- `POST \users\register` register and create new user session
 	Request
 		param: no
 		body:
@@ -404,13 +404,13 @@
 				schema:
 					timelapse: null,
 					user: null
-					error: array of object 
-						schema: 
+					error: array of object
+						schema:
 							path: input field (string)
 							value: user input (string)
 							message: error message (string)
 
-`POST \users\login` login user and create user session
+- `POST \users\login` login user and create user session
 	Request
 		param: no
 		body: json
@@ -421,7 +421,7 @@
 		success
 			status code: 200
 				type: json
-				schema: 
+				schema:
 						timelapse: time,
 						user:
 							id: int
@@ -438,13 +438,13 @@
 				schema:
 					timelapse: null,
 					user: null
-					error: array of object 
-						schema: 
+					error: array of object
+						schema:
 							path: input field (string)
 							value: user input (string)
 							message: error message (string)
 
-`POST \users\logout` logout user *
+- `POST \users\logout` logout user *
 	Request
 		param: no
 		body: no
