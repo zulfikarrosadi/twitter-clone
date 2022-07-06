@@ -13,9 +13,9 @@ features:
   6. get my choosen tweets                                                  DONE
   7. get all my tweets in infinite scroll                                   DONE
   8. delete my tweets                                                       DONE
-  9. updates my tweets                                        UNDER CONSTRUCTION
+  9. updates my tweets                                                      DONE
   10. delete photos when tweets is deleted                                  DONE
-  11. delete single tweet idChild                             UNDER CONSTRUCTION
+  11. delete single tweet idChild                                           DONE
   12. use url query instead url parameter in update routes           UNNECESSARY
   13. when delete tweet, change id from request body to url param           DONE
   14. use /tweets for every single tweets endpoint                          DONE
@@ -24,7 +24,7 @@ features:
   16. add prettierrc to configure trailing coma, operator
   17. create custom error instance and fix error feedback
   18. create schema for success feedback                             UNNECESSARY
-  19. user can add image description (alt text)               UNDER CONSTRUCTION
+  19. user can add image description (alt text)                         TO CHECK
   20. ability to add comment                                                DONE
   21. make 404 page                                                         DONE
   22. create functional test                                  UNDER CONSTRUCTION
@@ -33,7 +33,6 @@ features:
   25. soft delete for tweet image, and make schedulers to delete file
       monthly that marked as deleted                          UNDER CONSTRUCTION
   26. upload avatar / auto generated                          UNDER CONSTRUCTION
-      how to make multer can upload in 2 places
   27. update user profile
   28. Make response and request schema docs                   UNDER CONSTRUCTION
   29. Create TweetRequestError error instance and remove
