@@ -42,6 +42,8 @@ features:
       (add the 400 url invalid error response)                              DONE
   32. re-organize project folder, move to src folder                        DONE
   33. make sure the response is the same like API spec
+  34. create .env.example file to push to github
+  35. update the config file
 
 bug:
   1. DONE
