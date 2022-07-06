@@ -1,5 +1,5 @@
 Priorities:
-  32, 29, 28, 22
+  33, 22
 
 Good Read:
   1. Prisma$use (middleware on hook)
@@ -19,7 +19,7 @@ features:
   12. use url query instead url parameter in update routes           UNNECESSARY
   13. when delete tweet, change id from request body to url param           DONE
   14. use /tweets for every single tweets endpoint                          DONE
-  15. like a real twitter, split the first 140 character for 
+  15. like a real twitter, split the first 140 character for
       the parent tweet and, the rest is for the tweet child                                                   UNDER CONSTRUCTION
   16. add prettierrc to configure trailing coma, operator
   17. create custom error instance and fix error feedback
@@ -27,7 +27,7 @@ features:
   19. user can add image description (alt text)               UNDER CONSTRUCTION
   20. ability to add comment                                                DONE
   21. make 404 page                                                         DONE
-  22. create functional test
+  22. create functional test                                  UNDER CONSTRUCTION
   23. only receive tweet from form data not from body                       DONE
   24. handle when user not login and try to do things that required login   DONE
   25. soft delete for tweet image, and make schedulers to delete file
@@ -36,25 +36,27 @@ features:
       how to make multer can upload in 2 places
   27. update user profile
   28. Make response and request schema docs                   UNDER CONSTRUCTION
-  29. Create TweetRequestError error instance and remove errorHandler function
+  29. Create TweetRequestError error instance and remove
+      errorHandler function                                   UNDER CONSTRUCTION
   30. Implement ValidateUrlParam in comment routes                          DONE
-  31. fix the failed response on tweet docs 
-      (add the 400 url invalid error response)
-  32. re-organize project folder, move to src folder
+  31. fix the failed response on tweet docs
+      (add the 400 url invalid error response)                              DONE
+  32. re-organize project folder, move to src folder                        DONE
+  33. make sure the response is the same like API spec
 
 bug:
-  1. DONE 
+  1. DONE
     when user not providing any caption, then prisma wont insert any data to
     database and it make tweetParent.id is undefined
   2. DONE
      1) if we adding tweets with tweet child, then tweet_parent query will not
      work because it only receive string, not array
-     2) when adding tweets with tweet child, the first tweets in array that 
+     2) when adding tweets with tweet child, the first tweets in array that
      should belong to tweet_parent, will be added to tweet_child too
   3. DONE
      infinite scroll is break, because now id is not a numeric value
      its uuid
-  10. DONE 
+  10. DONE
      we can get the filename, we can deleted the photos, but when it comes
      multiple photos, it bug
   5. DONE
@@ -90,9 +92,9 @@ how to fix:
      2) read database normalization
      3) when user not providing any caption, we will still inserting
         null value to database, so we can get the tweetParent.id (temporary)
-  2. WARNING 2 DONE 
+  2. WARNING 2 DONE
       1) read prisma documentation on how create related records
-        https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#create-a-related-record 
+        https://www.prisma.io/docs/concepts/components/prisma-client/relation-queries#create-a-related-record
       2) using prisma create related records
       3) change id property to string and generate in server not by database
   3. BUG 3 DONE
