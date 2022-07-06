@@ -1,14 +1,10 @@
 const { createClient } = require('redis');
-const { EXP_TIME } = require('../constant/config');
+const { EXP_TIME, REDIS_URL } = require('../constant/config');
 
 let redisClient;
 (async () => {
   try {
-    redisClient = createClient('5000');
-    // redisClient.auth({
-    //   username: 'zulfikar',
-    //   password: 'zulfikarpassword',
-    // });
+    redisClient = createClient({ url: REDIS_URL });
 
     redisClient.on('error', (err) => console.log(`client error ${err}`));
     redisClient.on('ready', () => console.log('im ready'));
