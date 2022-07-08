@@ -89,7 +89,6 @@ const getUserSettingsService = async (username) => {
       },
     },
   });
-  console.log(result);
   return result;
 };
 
