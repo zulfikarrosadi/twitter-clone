@@ -10,6 +10,7 @@ const {
   updateUserProfileService,
   getUserSettingsService,
   updateUserSettingsService,
+  updateUserPasswordService,
 } = require('../src/services/userService');
 const { hashPassword } = require('../src/utils/userUtil');
 const { validUserProfile, validUpdatedUserProfile } = require('./helper');
@@ -62,13 +63,24 @@ describe('User Service', () => {
           userSettings.id,
           'usernameUpdate',
           'zulfikarUpdate@test.com',
-          await hashPassword('password'),
           new Date(),
           2,
         );
 
         expect(result.username).to.be.equal('usernameUpdate');
         expect(result.email).to.be.equal('zulfikarUpdate@test.com');
+      });
+    });
+
+    describe('update user password', () => {
+      it('should update user password', async () => {
+        const newPassword = 'new password';
+        const result = await updateUserPasswordService(
+          userSettings.id,
+          newPassword,
+        );
+
+        expect(result.id).to.be.equal(userSettings.id);
       });
     });
   });
