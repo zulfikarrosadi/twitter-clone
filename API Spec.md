@@ -284,7 +284,7 @@
 						comment: null,
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-- `GET /tweets/comments/:idTweet/:cursor` Get the next 10 comment
+- `GET /tweets/comments/:idTweet/:cursor` Get the next 10 comment ^^
 	Request
 		param:
 			idTweet:
@@ -304,6 +304,8 @@
 					comment: array
 						schema:
 							id: int,
+							idTweetParent: int
+							authorId: int
 							content: comment (string)
 							createdAt: string
 					error: null,
@@ -323,7 +325,7 @@
 						comment: null,
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
-- `POST /tweets/comments/` Post new comment *
+- `POST /tweets/comments/` Post new comment * ^^
 	Request
 		param: no
 		body:
@@ -348,7 +350,7 @@
 					comment: null
 					error: "Upss... Somethings wrong, please try again :D"
 
-- `DELETE /tweets/comments/:idComment` Delete comment *
+- `DELETE /tweets/comments/:idComment` Delete comment * ^^
 	Request
 		param:
 			idComment:
@@ -356,7 +358,13 @@
 				description: id comment that will be deleted
 	Response
 		success:
-			status code: 204
+			status code: 200
+				type: json
+				scema:
+					timelapse: time
+					cursor: null
+					comment: int (deleted comment id)
+					error: null
 		failed:
 			status code: 404
 				type: json
@@ -364,7 +372,7 @@
 					timelapse: null,
 					cursor: null,
 					comment: null,
-					error: "The comment is not found",
+					error: "Upps, comment is not found.. Try again",
 			status code: 400
 				type: json
 					schema:
@@ -374,24 +382,23 @@
 						error: 'Your URL is invalid, make sure you clicked the right button :D'
 
 ## User
-- `POST \users\register` register and create new user session
+- `POST \users\register` register and create new user session ^^
 	Request
 		param: no
 		body:
 			type: json
 			schema:
 				email: valid user email (string)
+				name: string
+				date of birth: time
 				password: password with min lenght 6 chars (string)
-				username: username with min lenght 6 and max lenght 20 and should only contain 							alphanumeric charaters (string)
+				passwordConfirmation: password
 	Response
 		success
 			status code: 201
 				type: json
 					schema:
 						timelapse: time,
-						user:
-							id: int
-							username: string
 						error: null,
 				type: cookie
 					name: 'JERAWAT',
@@ -403,14 +410,13 @@
 				type: json
 				schema:
 					timelapse: null,
-					user: null
 					error: array of object
 						schema:
 							path: input field (string)
 							value: user input (string)
 							message: error message (string)
 
-- `POST \users\login` login user and create user session
+- `POST \users\login` login user and create user session ^^
 	Request
 		param: no
 		body: json
@@ -423,9 +429,6 @@
 				type: json
 				schema:
 						timelapse: time,
-						user:
-							id: int
-							username: string
 						error: null,
 				type: cookie
 					name: 'JERAWAT',
@@ -434,6 +437,7 @@
 					sameSite: lax
 		failed
 			status code: 400
+				**if user failed on validation process**
 				type: json
 				schema:
 					timelapse: null,
@@ -443,8 +447,13 @@
 							path: input field (string)
 							value: user input (string)
 							message: error message (string)
+				**if user failed because no email or password is correct**
+					type: json
+					schema:
+						timelapse: null
+						error: 'Email or password is incorrect'
 
-- `POST \users\logout` logout user *
+- `POST \users\logout` logout user * ^^
 	Request
 		param: no
 		body: no
@@ -453,9 +462,18 @@
 	Response
 		success:
 			status code: 200
-				redirect to `\tweets` route
 		failed:
 			status code: 400
-				type: json
+				type: text
 				schema:
 					error: "Somethings wrong, let's go back to home"
+
+## Register flow
+- Input name
+- email
+- Date of birth
+it''ll  send the verification code
+- set password
+
+## What can i update after registering new account
+- change password, username, name, user photo profile, user photo banner
