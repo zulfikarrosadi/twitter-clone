@@ -4,9 +4,9 @@ const prisma = new PrismaClient();
 
 const createComment = async (idParent, comment, user) => {
   try {
-    const result = await prisma.tweet_comment.create({
+    const result = await prisma.tweetComment.create({
       data: {
-        id_tweet_parent: idParent,
+        idTweetParent: idParent,
         content: comment,
         authorId: user,
       },
@@ -34,20 +34,27 @@ const getAllCommentsByIdTweet = async (idTweet) => {
   return result;
 };
 
-const getInfinteCommentByCursor = async (idTweet, cursor) => {
-  const result = await prisma.tweet_comment.findMany({
+const getInfinteCommentByCursor = async (idTweet, latestCursor) => {
+  const result = await prisma.tweetComment.findMany({
     orderBy: { createdAt: 'desc' },
-    cursor: { id: cursor },
+    cursor: { id: latestCursor },
     skip: 1,
-    where: { id_tweet_parent: idTweet },
+    where: { idTweetParent: idTweet },
     take: 10,
+    select: {
+      id: true,
+      idTweetParent: true,
+      authorId: true,
+      content: true,
+      createdAt: true,
+    },
   });
   return result;
 };
 
 const deleteCommentById = async (idTweet, idComment) => {
   try {
-    const result = await prisma.tweet_comment.delete({
+    const result = await prisma.tweetComment.delete({
       where: { id: idComment },
       select: { id: true },
     });
