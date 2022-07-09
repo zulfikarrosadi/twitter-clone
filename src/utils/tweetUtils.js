@@ -7,7 +7,6 @@
  * @returns
  */
 const tweetSaveValidation = (tweets, files, userId) => {
-  console.log(tweets, userId, files, 'from tweet save validation');
   const createOptions = { tweet: tweets, authorId: userId };
 
   if (Array.isArray(tweets)) {
@@ -30,7 +29,6 @@ const tweetSaveValidation = (tweets, files, userId) => {
       },
     };
   }
-  console.log(createOptions);
 
   return createOptions;
 };
