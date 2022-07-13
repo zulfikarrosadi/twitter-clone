@@ -1,6 +1,15 @@
 Priorities:
   33, 22
 
+Immedietly fix:
+  - changed the service, cause the schema is changed
+  - create integration test for service
+  - create unit test for util
+  - create new mysql service in docker-compose
+  - fixing parameter name in all service (tweet service especially)
+  - 33
+    1. change the spec at success response
+
 Good Read:
   1. Prisma$use (middleware on hook)
 
@@ -44,6 +53,7 @@ features:
   33. make sure the response is the same like API spec
   34. create .env.example file to push to github
   35. update the config file
+  36. add documentation to database schema
 
 bug:
   1. DONE
