@@ -99,14 +99,12 @@ const loginUser = async (req, res) => {
 
 const logOutUser = async (req, res) => {
   try {
-    // remove user information on redis
     const { JERAWAT } = req.cookies;
-
     await deleteSession(JERAWAT);
 
-    return res.status(200).cookie('JERAWAT', '', { maxAge: 1 }).send('Log out');
+    return res.status(200).cookie('JERAWAT', '', { maxAge: 1 });
   } catch (error) {
-    return res.status(500).send('error');
+    return res.status(400).send("something is wrong, let's go back to home");
   }
 };
 
