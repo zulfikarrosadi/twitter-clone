@@ -19,30 +19,27 @@ const {
 } = require('../services/redisService');
 const { RequestError } = require('../errors/RequestError');
 const multer = require('../middlewares/upload');
+const { generateUsername } = require('../utils/generateUsername');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const { email, password, username, dateOfBirth, genderId, name } = req.body;
+  const { email, password, dateOfBirth, name } = req.body;
+  const username = generateUsername(name);
+
   try {
     const hashedPassword = await hashPassword(password);
     const userSettings = await createUserSettings(
       username,
       email,
       hashedPassword,
-      genderId,
       dateOfBirth,
     );
-    await createUserProfile(name, null, null, userSettings.id);
 
     const hashedUserId = hashUserId(userSettings.id);
-
-    await createSession(hashedUserId, {
-      id: userSettings.id,
-      username: userSettings.username,
-    });
+    await createUserProfile(name, null, null, userSettings.id);
+    await createSession(hashedUserId, { id: userSettings.id, username });
 
     const timelapse = getTimelapse(beforeTime);
-    const data = await getSession(hashedUserId);
 
     return res
       .status(201)
@@ -54,14 +51,12 @@ const addUser = async (req, res) => {
       .json({
         timelapse: `${timelapse} ms`,
         error: null,
-        user: JSON.parse(data),
       });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
       timelapse: null,
-      userId: null,
-      errors: uniqueConstraintErrorHandler(error.message, req.body),
+      error: uniqueConstraintErrorHandler(error.message, req.body),
     });
   }
 };
