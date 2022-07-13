@@ -1,5 +1,8 @@
 const { Router } = require('express');
-const userValidationSchema = require('../constant/userValidationSchema');
+const {
+  userValidationSchema,
+  userLoginValidationSchema,
+} = require('../constant/userValidationSchema');
 const {
   addUser,
   loginUser,
@@ -15,7 +18,7 @@ const validateUser = require('../middlewares/validateUser');
 const router = Router();
 
 router.post('/register', validateUser(userValidationSchema), addUser);
-router.post('/login', validateUser(userValidationSchema), loginUser);
+router.post('/login', validateUser(userLoginValidationSchema), loginUser);
 
 router.use(hasUserLogin);
 
