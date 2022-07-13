@@ -10,9 +10,9 @@ const createTweet = async (options) => {
   return result;
 };
 
-const getSingleTweetById = async (id) => {
+const getSingleTweetById = async (idTweetParent) => {
   const result = await prisma.tweetParent.findUnique({
-    where: { id },
+    where: { id: idTweetParent },
     include: {
       tweet_child: {
         select: { id: true, tweet: true },
@@ -78,7 +78,8 @@ const updateTweetById = async (data) => {
 
 const getPhotofilename = async (id) => {
   const result = await prisma.$queryRaw(
-    Prisma.sql`SELECT tp.images AS tweet_photos FROM tweet_parent AS tps
+    Prisma.sql`SELECT tp.images AS tweet_photos
+     FROM tweet_parent AS tps
     JOIN tweet_photos AS tp ON tps.id = tp.id_tweet_parent WHERE tps.id = ${id}`,
   );
   return result;
