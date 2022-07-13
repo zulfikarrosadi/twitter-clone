@@ -12,11 +12,7 @@ const {
   hashPassword,
   hashUserId,
 } = require('../utils/userUtil');
-const {
-  createSession,
-  getSession,
-  deleteSession,
-} = require('../services/redisService');
+const { createSession, deleteSession } = require('../services/redisService');
 const { RequestError } = require('../errors/RequestError');
 const multer = require('../middlewares/upload');
 const { generateUsername } = require('../utils/generateUsername');
