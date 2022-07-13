@@ -3,12 +3,15 @@ const { PrismaClient, Prisma } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 const createTweet = async (options) => {
-  const result = await prisma.tweet_parent.create({ data: options });
+  const result = await prisma.tweetParent.create({
+    data: options,
+    select: { id: true, tweet: true },
+  });
   return result;
 };
 
 const getSingleTweetById = async (id) => {
-  const result = await prisma.tweet_parent.findUnique({
+  const result = await prisma.tweetParent.findUnique({
     where: { id },
     include: {
       tweet_child: {
@@ -27,7 +30,7 @@ const getSingleTweetById = async (id) => {
 };
 
 const getAllTweets = async () => {
-  const result = await prisma.tweet_parent.findMany({
+  const result = await prisma.tweetParent.findMany({
     orderBy: { createdAt: 'desc' },
     take: 10,
     include: {
@@ -47,7 +50,7 @@ const getAllTweets = async () => {
 };
 
 const getInfiniteTweetsByCursor = async (cursor) => {
-  const result = await prisma.tweet_parent.findMany({
+  const result = await prisma.tweetParent.findMany({
     orderBy: { createdAt: 'desc' },
     cursor: { id: cursor },
     skip: 1,
@@ -69,7 +72,7 @@ const getInfiniteTweetsByCursor = async (cursor) => {
 };
 
 const updateTweetById = async (data) => {
-  const result = await prisma.tweet_parent.update(data);
+  const result = await prisma.tweetParent.update(data);
   return result;
 };
 
@@ -82,18 +85,18 @@ const getPhotofilename = async (id) => {
 };
 
 const deleteRelatedTweetChildAndTweetPhotos = async (id) => {
-  const result = await prisma.tweet_parent.update({
+  const result = await prisma.tweetParent.update({
     where: { id },
     data: {
-      tweet_child: { deleteMany: { id_tweet_parent: id } },
-      tweet_photos: { deleteMany: { id_tweet_parent: id } },
+      tweet_child: { deleteMany: { idTweetParent: id } },
+      tweet_photos: { deleteMany: { idTweetParent: id } },
     },
   });
   return result;
 };
 
 const deleteTweetParentById = async (id) => {
-  const result = await prisma.tweet_parent.delete({
+  const result = await prisma.tweetParent.delete({
     where: { id },
   });
   return result;
