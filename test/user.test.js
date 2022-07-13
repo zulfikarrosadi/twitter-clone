@@ -7,7 +7,7 @@ const { invalidUser, newUser, validUser } = require('./helper');
 const prisma = new PrismaClient();
 const request = supertest('http://localhost:3000');
 
-describe('E2E User Endpoint', () => {
+describe.skip('E2E User Endpoint', () => {
   describe('POST /users/register', () => {
     it('should registered new user', async () => {
       const response = await request.post('/users/register').send(newUser);
