@@ -1,4 +1,3 @@
-const errorHanlder = require('../utils/errorHanlder');
 const { getCursor } = require('../utils/tweetUtils');
 const {
   createComment,
