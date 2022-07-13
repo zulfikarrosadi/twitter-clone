@@ -8,3 +8,12 @@ services:
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     command: redis-server /usr/local/etc/redis/redis.conf
+  mysql-server-twitter:
+    container_name: mysql-server-twitter
+    image: mysql:8.0.29
+    environment:
+      - MYSQL_ROOT_PASSWORD=zulfikar
+    ports:
+      - 3307:3306
+    volumes:
+      - /home/zulfikar/Projects/mysql-server-docker/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
