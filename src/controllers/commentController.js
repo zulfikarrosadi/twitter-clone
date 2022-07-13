@@ -20,23 +20,27 @@ const addComment = async (req, res) => {
 
   try {
     const result = await createComment(idTweet, comment, userId);
-    if (result.code === 'P2003') throw Error('Foreign key error');
-
+    if (result.code === 'P2003') {
+      throw new RequestError(
+        'Upss... Somethings wrong, please try again :D',
+        400,
+      );
+    }
     const timelapse = getTimelapse(beforeTime);
 
     return res.status(201).json({
       timelapse: `${timelapse} ms`,
       cursor: null,
-      comment: result,
+      comment: result.id,
       error: null,
     });
   } catch (error) {
     console.log(error);
-    return res.status(400).json({
+    return res.status(error.code).json({
       timelapse: null,
       cursor: null,
       comment: null,
-      error: errorHanlder(error.message),
+      error: error.message,
     });
   }
 };
@@ -73,7 +77,7 @@ const getInfinteComment = async (req, res) => {
 
   try {
     const result = await getInfinteCommentByCursor(idTweet, cursor);
-    if (!result.length) throw Error('Comment not found');
+    if (!result.length) throw RequestError('The comment not found', 404);
 
     const timelapse = getTimelapse(beforeTime);
 
@@ -84,11 +88,11 @@ const getInfinteComment = async (req, res) => {
       error: null,
     });
   } catch (error) {
-    return res.status(404).json({
+    return res.status(error.code).json({
       timelapse: null,
       cursor: null,
       comment: null,
-      error: errorHanlder(error.message),
+      error: error.message,
     });
   }
 };
@@ -98,23 +102,24 @@ const deleteComment = async (req, res) => {
   const idTweet = parseInt(req.params.idTweet, 10);
   const idComment = parseInt(req.params.idComment, 10);
   try {
-    const result = await deleteCommentById(idTweet, idComment);
-    if (result.code === 'P2025') throw Error('Comment not found');
-
+    const { result } = await deleteCommentById(idTweet, idComment);
+    if (result.code === 'P2025') {
+      throw RequestError('Upps, comment is not found.. Try again', 404);
+    }
     const timelapse = getTimelapse(beforeTime);
 
     return res.status(200).json({
       timelapse: `${timelapse} ms`,
       cursor: null,
-      comment: result,
+      comment: result.id,
       error: null,
     });
   } catch (error) {
-    return res.status(404).json({
+    return res.status(error.code).json({
       timelapse: null,
       cursor: null,
       comment: null,
-      error: errorHanlder(error.message),
+      error: error.message,
     });
   }
 };
