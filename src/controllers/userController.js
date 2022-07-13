@@ -66,10 +66,12 @@ const loginUser = async (req, res) => {
   const { username, password } = req.body;
   try {
     const user = await getUserSettingsService(username);
-    if (!user) throw new Error('No user email');
+    if (!user) throw new RequestError('Email or password is incorrect', 400);
 
     const isVerified = await verifyPassword(password, user.password);
-    if (!isVerified) throw new Error('Wrong password');
+    if (!isVerified) {
+      throw new RequestError('Email or password is incorrect', 400);
+    }
 
     const hashedUserId = hashUserId(user.id);
 
@@ -89,10 +91,9 @@ const loginUser = async (req, res) => {
       .json({
         timelapse: `${timelapse} ms`,
         error: null,
-        user: { id: user.id, username: user.username },
       });
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    return res.status(error.code).json({ error: error.message });
   }
 };
 
