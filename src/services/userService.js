@@ -2,19 +2,12 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-const createUserSettings = async (
-  username,
-  email,
-  password,
-  genderId,
-  dateOfBirth,
-) => {
+const createUserSettings = async (username, email, password, dateOfBirth) => {
   const result = await prisma.userSetting.create({
     data: {
       email,
       password,
       username,
-      genderId,
       dateBirth: dateOfBirth,
     },
     select: { id: true, username: true },
