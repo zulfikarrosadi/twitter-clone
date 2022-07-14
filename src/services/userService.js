@@ -66,9 +66,9 @@ const updateUserProfileService = async (
   return result;
 };
 
-const getUserSettingsService = async (username) => {
+const getUserSettingsService = async (email) => {
   const result = prisma.userSetting.findUnique({
-    where: { username },
+    where: { email },
     include: {
       user: {
         select: {
