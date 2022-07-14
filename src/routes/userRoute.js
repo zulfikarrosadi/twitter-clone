@@ -25,7 +25,7 @@ router.use(hasUserLogin);
 router.post('/logout', logOutUser);
 router.get('/settings', getUserSettings);
 router.patch('/settings/information', updateUserSettings);
-// router.patch('/settings/password', updateUserPassword);
+router.patch('/settings/password', updateUserPassword);
 // router.patch('/profile', updateUserProfile);
 
 module.exports = router;
