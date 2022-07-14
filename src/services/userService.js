@@ -111,9 +111,9 @@ const updateUserSettingsService = async (
   return result;
 };
 
-const updateUserPasswordService = async (userId, newPassword) => {
+const updateUserPasswordService = async (userSettingId, newPassword) => {
   const result = await prisma.userSetting.update({
-    where: { id: userId },
+    where: { id: userSettingId },
     data: { password: newPassword },
     select: { id: true },
   });
