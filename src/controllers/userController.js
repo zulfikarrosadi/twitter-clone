@@ -60,9 +60,9 @@ const addUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const { username, password } = req.body;
+  const { email, password } = req.body;
   try {
-    const user = await getUserSettingsService(username);
+    const user = await getUserSettingsService(email);
     if (!user) throw new RequestError('Email or password is incorrect', 400);
 
     const isVerified = await verifyPassword(password, user.password);
