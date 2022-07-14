@@ -2,6 +2,11 @@ Priorities:
   33, 22
 
 Immedietly fix:
+  - update the auth to jwt
+    - make it clear the usersettings id and userprofile id cause it necessary for adding tweet
+  - add logging system
+  - bug when adding new tweet
+    - tweet is always null when try to add with form-data
   - changed the service, cause the schema is changed
   - create integration test for service
   - create unit test for util
