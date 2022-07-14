@@ -1,6 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const formData = require('express-form-data');
 
 const tweetRoutes = require('./src/routes/tweetRoute');
 const commentRoutes = require('./src/routes/commentRoute');
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('public'));
 app.use(cookieParser());
+app.use(formData.parse());
 
 app.use('/tweets', tweetRoutes);
 app.use('/tweets/comments', commentRoutes);
