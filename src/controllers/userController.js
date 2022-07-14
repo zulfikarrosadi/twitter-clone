@@ -3,6 +3,7 @@ const {
   updateUserSettingsService,
   createUserProfile,
   createUserSettings,
+  updateUserPasswordService,
 } = require('../services/userService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const getTimelapse = require('../utils/timeUtil');
@@ -146,10 +147,27 @@ const updateUserSettings = async (req, res) => {
   });
 };
 
+const updateUserPassword = async (req, res) => {
+  const { id: userSettingId } = req.user;
+  const { newPassword } = req.body;
+  try {
+    const hashedPassword = await hashPassword(newPassword);
+    await updateUserPasswordService(userSettingId, hashedPassword);
+
+    return res.status(200).json({ message: 'success' });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(400)
+      .json({ message: 'fail to change your password. Please try again' });
+  }
+};
+
 module.exports = {
   addUser,
   loginUser,
   logOutUser,
   getUserSettings,
   updateUserSettings,
+  updateUserPassword,
 };
