@@ -1,8 +1,6 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const formData = require('express-form-data');
-
 const tweetRoutes = require('./src/routes/tweetRoute');
 const commentRoutes = require('./src/routes/commentRoute');
 const userRoutes = require('./src/routes/userRoute');
@@ -12,11 +10,10 @@ const { deserializeUser } = require('./src/middlewares/deserializeUser');
 const app = express();
 
 app.use(cors({ origin: '*' }));
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(cookieParser());
-app.use(formData.parse());
 
 app.use(deserializeUser);
 
