@@ -5,7 +5,7 @@ const {
   getInfinteComment,
   deleteComment,
 } = require('../controllers/commentController');
-const hasUserLogin = require('../middlewares/hasUserLogin');
+const requiredLogin = require('../middlewares/requiredLogin');
 const isUrlParamInt = require('../middlewares/validateUrlParam');
 
 const router = Router();
@@ -15,7 +15,7 @@ router.use(isUrlParamInt);
 router.get('/:idTweet', getComments);
 router.get('/:idTweet/:cursor', getInfinteComment);
 
-router.use('/', hasUserLogin);
+router.use('/', requiredLogin);
 
 router.post('/:idTweet', addComment);
 router.delete('/:idComment', deleteComment);

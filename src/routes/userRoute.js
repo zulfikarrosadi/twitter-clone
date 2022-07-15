@@ -5,11 +5,11 @@ const {
   updateUserProfile,
   updateUserPassword,
 } = require('../controllers/userController');
-const hasUserLogin = require('../middlewares/hasUserLogin');
+const requiredLogin = require('../middlewares/requiredLogin');
 
 const router = Router();
 
-router.use(hasUserLogin);
+router.use(requiredLogin);
 
 router.get('/settings', getUserSettings);
 router.patch('/settings/information', updateUserSettings);
