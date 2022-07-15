@@ -44,12 +44,12 @@ const addTweet = async (req, res) => {
         error: null,
       });
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
       return res.status(400).json({
         timelapse: null,
         curosr: null,
         tweets: null,
-        error: errorHanlder(error.message),
+        error: errorHanlder(error),
       });
     }
   });
