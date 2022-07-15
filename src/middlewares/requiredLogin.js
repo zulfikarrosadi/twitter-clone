@@ -6,7 +6,7 @@ const { getSession } = require('../services/redisService');
  * @param {Response} res
  * @param {import('express').NextFunction} next
  */
-const hasUserLogin = async (req, res, next) => {
+const requiredLogin = async (req, res, next) => {
   const { JERAWAT } = req.cookies;
 
   const user = await getSession(JERAWAT);
@@ -21,4 +21,4 @@ const hasUserLogin = async (req, res, next) => {
   req.user = JSON.parse(user);
   return next();
 };
-module.exports = hasUserLogin;
+module.exports = requiredLogin;
