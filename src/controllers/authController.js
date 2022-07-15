@@ -3,7 +3,7 @@ const getTimelapse = require('../utils/timeUtil');
 const { RequestError } = require('../errors/RequestError');
 const { createSession, deleteSession } = require('../services/redisService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
-const { EXP_TIME } = require('../constant/config');
+const { COOKIE_EXP_TIME } = require('../constant/config');
 const {
   getUserSettingsService,
   createUserProfile,
@@ -38,7 +38,7 @@ const addUser = async (req, res) => {
     return res
       .status(201)
       .cookie('JERAWAT', hashedUserId, {
-        maxAge: EXP_TIME,
+        maxAge: COOKIE_EXP_TIME,
         SameSite: 'Lax',
         httpOnly: true,
       })
@@ -78,7 +78,7 @@ const loginUser = async (req, res) => {
     return res
       .status(200)
       .cookie('JERAWAT', hashedUserId, {
-        maxAge: EXP_TIME,
+        maxAge: COOKIE_EXP_TIME,
         SameSite: 'Lax',
         httpOnly: true,
       })
