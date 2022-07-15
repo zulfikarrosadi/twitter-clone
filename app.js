@@ -6,6 +6,8 @@ const formData = require('express-form-data');
 const tweetRoutes = require('./src/routes/tweetRoute');
 const commentRoutes = require('./src/routes/commentRoute');
 const userRoutes = require('./src/routes/userRoute');
+const authRoute = require('./src/routes/authRoute');
+const { deserializeUser } = require('./src/middlewares/deserializeUser');
 
 const app = express();
 
@@ -16,9 +18,12 @@ app.use(express.static('public'));
 app.use(cookieParser());
 app.use(formData.parse());
 
+app.use(deserializeUser);
+
 app.use('/tweets', tweetRoutes);
 app.use('/tweets/comments', commentRoutes);
 app.use('/users', userRoutes);
+app.use('/', authRoute);
 
 app.use((req, res) => res.status(404).json({ message: 'page not found' }));
 
