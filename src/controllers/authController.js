@@ -1,9 +1,9 @@
 const { generateUsername } = require('../utils/generateUsername');
 const getTimelapse = require('../utils/timeUtil');
 const { RequestError } = require('../errors/RequestError');
-const { createSession, deleteSession } = require('../services/redisService');
+const { deleteSession } = require('../services/redisService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
-const { COOKIE_EXP_TIME } = require('../constant/config');
+const { createSession } = require('../utils/sessionUtil');
 const {
   getUserSettingsService,
   createUserProfile,
@@ -28,24 +28,20 @@ const addUser = async (req, res) => {
       hashedPassword,
       dateOfBirth,
     );
+    const userProfile = await createUserProfile(
+      name,
+      null,
+      null,
+      userSettings.id,
+    );
 
-    const hashedUserId = hashUserId(userSettings.id);
-    await createUserProfile(name, null, null, userSettings.id);
-    await createSession(hashedUserId, { id: userSettings.id, username });
-
+    await createSession(res, userProfile.id, userSettings.id);
     const timelapse = getTimelapse(beforeTime);
 
-    return res
-      .status(201)
-      .cookie('JERAWAT', hashedUserId, {
-        maxAge: COOKIE_EXP_TIME,
-        SameSite: 'Lax',
-        httpOnly: true,
-      })
-      .json({
-        timelapse: `${timelapse} ms`,
-        error: null,
-      });
+    return res.status(201).json({
+      timelapse: `${timelapse} ms`,
+      error: null,
+    });
   } catch (error) {
     console.log(error);
     return res.status(400).json({
