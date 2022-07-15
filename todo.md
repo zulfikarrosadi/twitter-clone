@@ -77,6 +77,8 @@ bug:
      multiple photos, it bug
   5. DONE
     cannot uploaded multiple file multer
+  6. DONE
+    when generating new accessToken, suddenly the req.user object returning whole jwt without decoded
 
 warning:
   1. we still do double checking when adding tweets                         DONE
