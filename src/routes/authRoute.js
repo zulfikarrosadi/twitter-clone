@@ -7,7 +7,7 @@ const {
   addUser,
   loginUser,
   logOutUser,
-} = require('../controllers/userController');
+} = require('../controllers/authController');
 const validateUser = require('../middlewares/validateUser');
 
 const router = Router();
