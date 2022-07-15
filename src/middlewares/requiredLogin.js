@@ -1,5 +1,3 @@
-const { getSession } = require('../services/redisService');
-
 /**
  * check the user if user is already log in
  * @param {Request} req
@@ -7,10 +5,7 @@ const { getSession } = require('../services/redisService');
  * @param {import('express').NextFunction} next
  */
 const requiredLogin = async (req, res, next) => {
-  const { JERAWAT } = req.cookies;
-
-  const user = await getSession(JERAWAT);
-  if (!user) {
+  if (!req.user) {
     return res.status(403).json({
       timelapse: null,
       cursor: null,
@@ -18,7 +13,6 @@ const requiredLogin = async (req, res, next) => {
       error: 'You required to login to do this action',
     });
   }
-  req.user = JSON.parse(user);
   return next();
 };
 module.exports = requiredLogin;
