@@ -3,11 +3,11 @@
  * is the tweet has tweet_child? or user is provide the image file? etc
  * @param {object} tweets
  * @param {Reqeust} files
- * @param {number} userId
+ * @param {number} userProfileId
  * @returns
  */
-const tweetSaveValidation = (tweets, files, userId) => {
-  const createOptions = { tweet: tweets, authorId: userId };
+const tweetSaveValidation = (tweets, files, userProfileId) => {
+  const createOptions = { tweet: tweets, authorId: userProfileId };
 
   if (Array.isArray(tweets)) {
     createOptions.tweet = tweets.shift();
