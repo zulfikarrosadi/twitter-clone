@@ -59,6 +59,7 @@ const getComments = async (req, res) => {
       error: null,
     });
   } catch (error) {
+    console.log(error);
     return res.status(404).json({
       timelapse: null,
       cursor: null,
