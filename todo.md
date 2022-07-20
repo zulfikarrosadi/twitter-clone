@@ -2,15 +2,12 @@ Priorities:
   33, 22
 
 Immedietly fix:
-  - update the auth to jwt
-    - make it clear the usersettings id and userprofile id cause it necessary for adding tweet
+  - how to update the banner in updateUserProfile
+  - update updateUserSetting handler
   - add logging system
-  - bug when adding new tweet
-    - tweet is always null when try to add with form-data
   - changed the service, cause the schema is changed
   - create integration test for service
   - create unit test for util
-  - create new mysql service in docker-compose
   - fixing parameter name in all service (tweet service especially)
   - 33
     1. change the spec at success response
