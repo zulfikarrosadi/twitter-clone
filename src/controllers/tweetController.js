@@ -31,8 +31,12 @@ const addTweet = async (req, res) => {
       if (e) throw e;
       if (!tweets && req.files.length < 1) throw Error('tweet is null');
 
-      const { userId } = req.user;
-      const createOptions = tweetSaveValidation(tweets, req.files, userId);
+      const { userProfileId } = req.user;
+      const createOptions = tweetSaveValidation(
+        tweets,
+        req.files,
+        userProfileId,
+      );
 
       const result = await createTweet(createOptions);
       const timelapse = getTimelapse(beforeTime);
@@ -49,7 +53,7 @@ const addTweet = async (req, res) => {
         timelapse: null,
         curosr: null,
         tweets: null,
-        error: errorHanlder(error),
+        error: errorHanlder(error.message || error),
       });
     }
   });
