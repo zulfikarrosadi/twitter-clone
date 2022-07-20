@@ -6,7 +6,7 @@
  */
 const uniqueConstraintErrorHandler = (e, body) => {
   const errors = [];
-  if (e.split(' ').includes('`email`')) {
+  if (e.includes('email')) {
     errors.push({
       path: 'email',
       value: body.email,
