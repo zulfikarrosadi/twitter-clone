@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const formData = require('express-form-data');
 const {
   getUserSettings,
   updateUserSettings,
@@ -10,6 +11,7 @@ const requiredLogin = require('../middlewares/requiredLogin');
 const router = Router();
 
 router.use(requiredLogin);
+router.use(formData.parse());
 
 router.get('/settings', getUserSettings);
 router.patch('/settings/information', updateUserSettings);

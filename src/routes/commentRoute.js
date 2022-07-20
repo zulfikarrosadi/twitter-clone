@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const formData = require('express-form-data');
 const {
   addComment,
   getComments,
@@ -11,6 +12,7 @@ const isUrlParamInt = require('../middlewares/validateUrlParam');
 const router = Router();
 
 router.use(isUrlParamInt);
+router.use(formData.parse());
 
 router.get('/:idTweet', getComments);
 router.get('/:idTweet/:cursor', getInfinteComment);

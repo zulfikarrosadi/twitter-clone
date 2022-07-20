@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const formData = require('express-form-data');
 const {
   addTweet,
   getTweets,
@@ -20,6 +21,9 @@ router.use('/', requiredLogin);
 
 router.post('/', addTweet);
 router.delete('/:idParent', isUrlParamInt, deleteTweet);
+
+router.use(formData.parse());
+
 router.patch('/:idParent', isUrlParamInt, updateTweet);
 router.patch('/:idParent/:idChild', isUrlParamInt, updateTweet);
 
