@@ -86,20 +86,14 @@ const getUserSettingsService = async (email) => {
 };
 
 const updateUserSettingsService = async (
-  id,
+  userSettingId,
   username,
-  email,
   dateOfBirth,
   genderId,
 ) => {
   const result = await prisma.userSetting.update({
-    where: { id },
-    data: {
-      username,
-      email,
-      dateBirth: dateOfBirth,
-      genderId,
-    },
+    where: { id: userSettingId },
+    data: { username, genderId, dateBirth: dateOfBirth },
   });
   return result;
 };
