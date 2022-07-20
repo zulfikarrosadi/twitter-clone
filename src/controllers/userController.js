@@ -70,19 +70,38 @@ const updateUserPassword = async (req, res) => {
 
 const updateUserProfile = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const upload = multer.single('avatar');
+  const upload = multer.fields([
+    { name: 'avatar', maxCount: 1 },
+    { name: 'banner', maxCount: 1 },
+  ]);
 
   upload(req, res, async (e) => {
     const { name, bio, website } = req.body;
     const { userProfileId } = req.user;
     let avatar;
+    let banner;
     try {
       if (e) throw e;
-      if (!name && !bio && !website) {
+      if (Object.prototype.hasOwnProperty.call(req.files, 'avatar')) {
+        avatar = req.files.avatar[0].filename;
+      } else {
+        avatar = null;
+      }
+      if (Object.prototype.hasOwnProperty.call(req.files, 'banner')) {
+        banner = req.files.banner[0].filename;
+      } else {
+        banner = null;
+      }
+
+      if (
+        !name.trim() &&
+        !bio.trim() &&
+        !website.trim() &&
+        !avatar &&
+        !banner
+      ) {
         throw new RequestError("Uppsie, it's empty");
       }
-      if (!req.file) avatar = null;
-      else avatar = req.file.filename;
 
       await updateUserProfileService(
         userProfileId,
@@ -90,7 +109,7 @@ const updateUserProfile = async (req, res) => {
         bio,
         website,
         avatar,
-        null,
+        banner,
       );
       const timelapse = getTimelapse(beforeTime);
       return res
@@ -100,7 +119,7 @@ const updateUserProfile = async (req, res) => {
       console.log(error);
       return res
         .status(400)
-        .json({ message: 'failed', timelapse: null, error });
+        .json({ message: 'failed', timelapse: null, error: error.message });
     }
   });
 };
