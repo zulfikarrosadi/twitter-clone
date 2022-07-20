@@ -26,13 +26,17 @@ const hasOwnAvatarAndBanner = (files) => {
   let avatar;
   let banner;
 
-  Object.prototype.hasOwnProperty.call(files, 'avatar')
-    ? (avatar = files.avatar[0].filename)
-    : (avatar = null);
+  if (Object.prototype.hasOwnProperty.call(files, 'avatar')) {
+    avatar = files.avatar[0].filename;
+  } else {
+    avatar = null;
+  }
 
-  Object.prototype.hasOwnProperty.call(files, 'banner')
-    ? (banner = files.banner[0].filename)
-    : (banner = null);
+  if (Object.prototype.hasOwnProperty.call(files, 'banner')) {
+    banner = files.banner[0].filename;
+  } else {
+    banner = null;
+  }
 
   return { avatar, banner };
 };
