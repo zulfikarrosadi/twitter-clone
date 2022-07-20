@@ -77,14 +77,13 @@ const updateTweetById = async (data) => {
 };
 
 const getPhotofilename = async (id) => {
-  // get the uploaded tweet photo filename based on join with tweet result join
-  const result = await prisma.$queryRaw(
-    Prisma.sql`SELECT tp.images AS tweet_photos
-    FROM tweet_parent AS tps
-    JOIN tweet_photos AS tp
-    ON tps.id = tp.id_tweet_parent
-    WHERE tps.id = ${id}`,
-  );
+  const result = await prisma.tweetParent.findFirst({
+    where: { id },
+    include: {
+      tweet_photos: { select: { images: true } },
+    },
+  });
+
   return result;
 };
 
