@@ -9,11 +9,7 @@ const {
   createUserProfile,
   createUserSettings,
 } = require('../services/userService');
-const {
-  verifyPassword,
-  hashPassword,
-  hashUserId,
-} = require('../utils/userUtil');
+const { verifyPassword, hashPassword } = require('../utils/userUtil');
 
 const addUser = async (req, res) => {
   const beforeTime = new Date().getTime();
