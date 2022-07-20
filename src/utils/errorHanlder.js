@@ -5,6 +5,9 @@ const errorHanlder = (error) => {
       errorMessage =
         'Your file format is not supported, please just upload file with png, jpg, or jpeg format';
       break;
+    case 'File too large':
+      errorMessage = 'Your file is too large';
+      break;
     case 'tweet is null':
       errorMessage = 'You dont have anything to upload :D';
       break;
