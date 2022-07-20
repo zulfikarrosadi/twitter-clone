@@ -2,11 +2,13 @@ const {
   getUserSettingsService,
   updateUserSettingsService,
   updateUserPasswordService,
+  updateUserProfileService,
 } = require('../services/userService');
 const getTimelapse = require('../utils/timeUtil');
 const { hashPassword } = require('../utils/userUtil');
 const { createSession } = require('../services/redisService');
 const multer = require('../middlewares/upload');
+const { RequestError } = require('../errors/RequestError');
 
 const getUserSettings = async (req, res) => {
   try {
