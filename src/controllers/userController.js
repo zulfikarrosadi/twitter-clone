@@ -68,8 +68,46 @@ const updateUserPassword = async (req, res) => {
   }
 };
 
+const updateUserProfile = async (req, res) => {
+  const beforeTime = new Date().getTime();
+  const upload = multer.single('avatar');
+
+  upload(req, res, async (e) => {
+    const { name, bio, website } = req.body;
+    const { userProfileId } = req.user;
+    let avatar;
+    try {
+      if (e) throw e;
+      if (!name && !bio && !website) {
+        throw new RequestError("Uppsie, it's empty");
+      }
+      if (!req.file) avatar = null;
+      else avatar = req.file.filename;
+
+      await updateUserProfileService(
+        userProfileId,
+        name,
+        bio,
+        website,
+        avatar,
+        null,
+      );
+      const timelapse = getTimelapse(beforeTime);
+      return res
+        .status(200)
+        .json({ message: 'success', timelapse: `${timelapse} ms`, error: [] });
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(400)
+        .json({ message: 'failed', timelapse: null, error });
+    }
+  });
+};
+
 module.exports = {
   getUserSettings,
   updateUserSettings,
   updateUserPassword,
+  updateUserProfile,
 };
