@@ -26,34 +26,29 @@ const getUserSettings = async (req, res) => {
 
 const updateUserSettings = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const upload = multer.single('avatar');
+  const { username, dateOfBirth, genderId } = req.body;
+  const { userSettingId } = req.user;
 
-  upload(req, res, async (e) => {
-    const { username, dateOfBirth } = req.body;
-    const { userId } = req.user;
-    const { JERAWAT } = req.cookies;
-    let avatar;
-
-    try {
-      if (e) throw e;
-      if (!username && !dateOfBirth) throw Error('settings is null');
-      if (!req.file) avatar = null;
-      else avatar = req.file.filename;
-
-      await updateUserSettingsService(userId, username, avatar, dateOfBirth);
-      await createSession(JERAWAT, { userId, username });
-      const timelapse = getTimelapse(beforeTime);
-
-      return res
-        .status(200)
-        .json({ timelapse: `${timelapse} ms`, error: null });
-    } catch (error) {
-      return res.status(400).json({
-        timelapse: null,
-        error: error.message,
-      });
+  try {
+    if (!username && !dateOfBirth && !genderId) {
+      throw new RequestError('User settings data is empty');
     }
-  });
+
+    await updateUserSettingsService(
+      userSettingId,
+      username,
+      dateOfBirth,
+      parseInt(genderId, 10),
+    );
+    const timelapse = getTimelapse(beforeTime);
+
+    return res
+      .status(200)
+      .json({ message: 'success', timelapse: `${timelapse} ms`, error: null });
+  } catch (error) {
+    console.log(error);
+    return res.status(400).json({ message: 'failed', timelapse: null, error });
+  }
 };
 
 const updateUserPassword = async (req, res) => {
