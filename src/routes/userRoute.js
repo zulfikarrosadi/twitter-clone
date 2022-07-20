@@ -11,11 +11,13 @@ const requiredLogin = require('../middlewares/requiredLogin');
 const router = Router();
 
 router.use(requiredLogin);
+
+router.patch('/profile', updateUserProfile);
+
 router.use(formData.parse());
 
 router.get('/settings', getUserSettings);
 router.patch('/settings/information', updateUserSettings);
 router.patch('/settings/password', updateUserPassword);
-// router.patch('/profile', updateUserProfile);
 
 module.exports = router;
