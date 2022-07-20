@@ -2,8 +2,7 @@ Priorities:
   33, 22
 
 Immedietly fix:
-  - how to update the banner in updateUserProfile
-  - update updateUserSetting handler
+  - log out user when update the password
   - add logging system
   - changed the service, cause the schema is changed
   - create integration test for service
