@@ -20,8 +20,8 @@ const createComment = async (idParent, comment, user) => {
 };
 
 const getAllCommentsByIdTweet = async (idTweet) => {
-  const result = await prisma.tweet_comment.findMany({
-    where: { id_tweet_parent: idTweet },
+  const result = await prisma.tweetComment.findMany({
+    where: { idTweetParent: idTweet },
     take: 10,
     select: {
       id: true,
