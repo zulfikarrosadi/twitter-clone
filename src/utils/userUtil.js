@@ -21,4 +21,33 @@ const hashPassword = async (password) => {
 
   return hashedPassword;
 };
-module.exports = { verifyPassword, hashUserId, hashPassword };
+
+const hasOwnAvatarAndBanner = (files) => {
+  let avatar;
+  let banner;
+
+  Object.prototype.hasOwnProperty.call(files, 'avatar')
+    ? (avatar = files.avatar[0].filename)
+    : (avatar = null);
+
+  Object.prototype.hasOwnProperty.call(files, 'banner')
+    ? (banner = files.banner[0].filename)
+    : (banner = null);
+
+  return { avatar, banner };
+};
+
+const userProfileData = (name, bio, website, avatar, banner) => {
+  if (!name.trim() && !bio.trim() && !website.trim() && !avatar && !banner) {
+    return false;
+  }
+  return true;
+};
+
+module.exports = {
+  verifyPassword,
+  hashUserId,
+  hashPassword,
+  hasOwnAvatarAndBanner,
+  userProfileData,
+};

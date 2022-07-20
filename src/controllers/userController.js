@@ -5,7 +5,11 @@ const {
   updateUserProfileService,
 } = require('../services/userService');
 const getTimelapse = require('../utils/timeUtil');
-const { hashPassword } = require('../utils/userUtil');
+const {
+  hashPassword,
+  hasOwnAvatarAndBanner,
+  userProfileData,
+} = require('../utils/userUtil');
 const { createSession } = require('../services/redisService');
 const multer = require('../middlewares/upload');
 const { RequestError } = require('../errors/RequestError');
@@ -78,30 +82,12 @@ const updateUserProfile = async (req, res) => {
   upload(req, res, async (e) => {
     const { name, bio, website } = req.body;
     const { userProfileId } = req.user;
-    let avatar;
-    let banner;
     try {
       if (e) throw e;
-      if (Object.prototype.hasOwnProperty.call(req.files, 'avatar')) {
-        avatar = req.files.avatar[0].filename;
-      } else {
-        avatar = null;
-      }
-      if (Object.prototype.hasOwnProperty.call(req.files, 'banner')) {
-        banner = req.files.banner[0].filename;
-      } else {
-        banner = null;
-      }
+      const { avatar, banner } = hasOwnAvatarAndBanner(req.files);
+      const isEmpty = userProfileData(name, bio, website, avatar, banner);
 
-      if (
-        !name.trim() &&
-        !bio.trim() &&
-        !website.trim() &&
-        !avatar &&
-        !banner
-      ) {
-        throw new RequestError("Uppsie, it's empty");
-      }
+      if (!isEmpty) throw new RequestError("Uppsie, it's empty");
 
       await updateUserProfileService(
         userProfileId,
