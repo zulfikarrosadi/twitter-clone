@@ -51,35 +51,30 @@ const loginUser = async (req, res) => {
   const beforeTime = new Date().getTime();
   const { email, password } = req.body;
   try {
-    const user = await getUserSettingsService(email);
-    if (!user) throw new RequestError('Email or password is incorrect', 400);
+    const {
+      password: hashedPassword,
+      user: userProfileId,
+      id: userSettingId,
+    } = await getUserSettingsService(email);
 
-    const isVerified = await verifyPassword(password, user.password);
+    const isVerified = await verifyPassword(password, hashedPassword);
     if (!isVerified) {
       throw new RequestError('Email or password is incorrect', 400);
     }
 
-    const hashedUserId = hashUserId(user.id);
+    await createSession(res, userProfileId[0].id, userSettingId);
 
-    await createSession(hashedUserId, {
-      userId: user.id,
-      username: user.username,
-    });
     const timelapse = getTimelapse(beforeTime);
 
-    return res
-      .status(200)
-      .cookie('JERAWAT', hashedUserId, {
-        maxAge: COOKIE_EXP_TIME,
-        SameSite: 'Lax',
-        httpOnly: true,
-      })
-      .json({
-        timelapse: `${timelapse} ms`,
-        error: null,
-      });
+    return res.status(200).json({
+      timelapse: `${timelapse} ms`,
+      error: null,
+    });
   } catch (error) {
-    return res.status(error.code).json({ error: error.message });
+    console.log(error);
+    return res
+      .status(error.code || 400)
+      .json({ error: 'Email or password is incorrect' });
   }
 };
 
