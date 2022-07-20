@@ -51,7 +51,7 @@ const updateUserSettings = async (req, res) => {
 };
 
 const updateUserPassword = async (req, res) => {
-  const { id: userSettingId } = req.user;
+  const { userSettingId } = req.user;
   const { newPassword } = req.body;
   try {
     const hashedPassword = await hashPassword(newPassword);
