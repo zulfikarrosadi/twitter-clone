@@ -34,11 +34,11 @@ const addComment = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    return res.status(error.code).json({
+    return res.status(error.code || 400).json({
       timelapse: null,
       cursor: null,
       comment: null,
-      error: error.message,
+      error: error.message || error,
     });
   }
 };
