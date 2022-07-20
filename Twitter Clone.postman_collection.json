@@ -1,0 +1,497 @@
+{
+	"info": {
+		"_postman_id": "b290ac40-0889-4ba8-84e1-2f46eeadd49e",
+		"name": "Twitter Clone",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "{{$randomExampleEmail}}",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "default"
+								},
+								{
+									"key": "name",
+									"value": "TestingName",
+									"type": "default"
+								},
+								{
+									"key": "dateOfBirth",
+									"value": "{{$isoTimestamp}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "Cristina_Brekke68@example.net",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "{{password}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User Account",
+			"item": [
+				{
+					"name": "Update User Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "newPassword",
+									"value": "my new password",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/settings/password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"settings",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "myNewName",
+									"type": "default"
+								},
+								{
+									"key": "bio",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "website",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/home/zulfikar/Pictures/Color Hunt Palette 177749.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Setting",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "myUsernames",
+									"type": "default"
+								},
+								{
+									"key": "dateOfBirth",
+									"value": "{{$isoTimestamp}}",
+									"type": "default"
+								},
+								{
+									"key": "genderId",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/settings/information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"settings",
+								"information"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Tweet",
+			"item": [
+				{
+					"name": "All Tweets",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/tweets",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Tweet",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tweets",
+									"value": "parent",
+									"description": "this is for tweet parent",
+									"type": "default"
+								},
+								{
+									"key": "tweets",
+									"value": "child",
+									"description": "this is for tweet child",
+									"type": "default"
+								},
+								{
+									"key": "tweetPhotos",
+									"type": "file",
+									"src": []
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/tweets",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tweet Parent",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tweet",
+									"value": "update this tweet",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/tweets/:idTweetParent",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets",
+								":idTweetParent"
+							],
+							"variable": [
+								{
+									"key": "idTweetParent",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Tweet Child",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "tweet",
+									"value": "update the child",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/tweets/:idTweetParent/:idTweetChild",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets",
+								":idTweetParent",
+								":idTweetChild"
+							],
+							"variable": [
+								{
+									"key": "idTweetParent",
+									"value": ""
+								},
+								{
+									"key": "idTweetChild",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Tweet",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/tweets/:idTweetParent",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets",
+								":idTweetParent"
+							],
+							"variable": [
+								{
+									"key": "idTweetParent",
+									"value": "",
+									"description": "id tweet parent\nand it'll delete the tweet child too"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "New Comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "comment",
+									"value": "testing comment using form data",
+									"type": "default"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/tweets/comments/:idTweetParent",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets",
+								"comments",
+								":idTweetParent"
+							],
+							"variable": [
+								{
+									"key": "idTweetParent",
+									"value": "15"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/tweets/comments/:idTweetParent",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"tweets",
+								"comments",
+								":idTweetParent"
+							],
+							"variable": [
+								{
+									"key": "idTweetParent",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "default"
+		},
+		{
+			"key": "password",
+			"value": "password",
+			"type": "default"
+		},
+		{
+			"key": "passwordConfirmation",
+			"value": "password",
+			"type": "default"
+		},
+		{
+			"key": "newPassword",
+			"value": "new password",
+			"type": "default"
+		}
+	]
+}
