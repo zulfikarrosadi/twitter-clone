@@ -10,7 +10,6 @@ const {
   hasOwnAvatarAndBanner,
   userProfileData,
 } = require('../utils/userUtil');
-const { createSession } = require('../services/redisService');
 const multer = require('../middlewares/upload');
 const { RequestError } = require('../errors/RequestError');
 
