@@ -13,12 +13,11 @@ const addComment = async (req, res) => {
   const idTweet = parseInt(req.params.idTweet, 10);
 
   const { comment } = req.body;
-  const { userId } = req.user;
-
-  if (!comment) throw Error('comment is empty');
+  const { userProfileId } = req.user;
 
   try {
-    const result = await createComment(idTweet, comment, userId);
+    if (!comment) throw Error('comment is empty');
+    const result = await createComment(idTweet, comment, userProfileId);
     if (result.code === 'P2003') {
       throw new RequestError(
         'Upss... Somethings wrong, please try again :D',
