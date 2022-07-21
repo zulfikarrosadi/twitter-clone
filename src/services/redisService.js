@@ -1,5 +1,5 @@
 const { createClient } = require('redis');
-const { EXP_TIME, REDIS_URL } = require('../constant/config');
+const { REDIS_URL } = require('../constant/config');
 
 let redisClient;
 (async () => {
