@@ -1,4 +1,4 @@
-const { getSession } = require('../services/redisService');
+const { getRefreshToken } = require('../services/redisService');
 const { createToken, verifyJwt } = require('../utils/jwtUtil');
 const { generateSessionId } = require('../utils/sessionUtil');
 
@@ -21,7 +21,9 @@ const deserializeUser = async (req, res, next) => {
   const { payload: refreshPayload } = verifyJwt(refreshToken);
 
   if (!refreshPayload) return next();
-  const isRefreshTokenValid = await getSession(refreshPayload.refreshSessionId);
+  const isRefreshTokenValid = await getRefreshToken(
+    refreshPayload.refreshSessionId,
+  );
 
   if (!isRefreshTokenValid) return next();
   const { accessToken: newAccessToken } = createToken(
