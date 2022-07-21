@@ -31,7 +31,7 @@ const createToken = (
   const accessToken = jwt.sign(
     { userProfileId, userSettingId, accessSessionId },
     PRIVATE_KEY,
-    { algorithm: 'RS512', expiresIn: '10s' },
+    { algorithm: 'RS512', expiresIn: '15m' },
   );
 
   const refreshToken = jwt.sign(
