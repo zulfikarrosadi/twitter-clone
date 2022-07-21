@@ -80,10 +80,12 @@ const loginUser = async (req, res) => {
 
 const logOutUser = async (req, res) => {
   try {
-    const { JERAWAT } = req.cookies;
-    await deleteRefreshToken(JERAWAT);
-
-    return res.status(200).cookie('JERAWAT', '', { maxAge: 1 });
+    req.user = null;
+    return res
+      .status(204)
+      .cookie('accessToken', '', { maxAge: 1 })
+      .cookie('refreshToken', '', { maxAge: 1 })
+      .send('success');
   } catch (error) {
     return res.status(400).send("something is wrong, let's go back to home");
   }
