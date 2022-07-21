@@ -16,7 +16,7 @@ let redisClient;
   }
 })();
 
-const getSession = async (key) => {
+const getRefreshToken = async (key) => {
   const session = await redisClient.get(key);
   return session;
 };
@@ -29,4 +29,4 @@ const saveRefreshToken = async (refreshSessionId, refreshToken) => {
   await redisClient.set(refreshSessionId, JSON.stringify(refreshToken));
 };
 
-module.exports = { getSession, deleteSession, saveRefreshToken };
+module.exports = { getRefreshToken, deleteSession, saveRefreshToken };
