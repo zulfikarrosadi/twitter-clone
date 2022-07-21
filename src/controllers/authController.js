@@ -1,7 +1,7 @@
 const { generateUsername } = require('../utils/generateUsername');
 const getTimelapse = require('../utils/timeUtil');
 const { RequestError } = require('../errors/RequestError');
-const { deleteSession } = require('../services/redisService');
+const { deleteRefreshToken } = require('../services/redisService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const { createSession } = require('../utils/sessionUtil');
 const {
@@ -81,7 +81,7 @@ const loginUser = async (req, res) => {
 const logOutUser = async (req, res) => {
   try {
     const { JERAWAT } = req.cookies;
-    await deleteSession(JERAWAT);
+    await deleteRefreshToken(JERAWAT);
 
     return res.status(200).cookie('JERAWAT', '', { maxAge: 1 });
   } catch (error) {
