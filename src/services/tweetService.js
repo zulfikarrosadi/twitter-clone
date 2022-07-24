@@ -101,9 +101,11 @@ const deleteRelatedTweetChildAndTweetPhotos = async (id) => {
   return result;
 };
 
-const deleteTweetParentById = async (id) => {
-  const result = await prisma.tweetParent.delete({
-    where: { id },
+const deleteTweetParentById = async (userProfileId, id) => {
+  const result = await prisma.user.update({
+    where: { id: userProfileId },
+    data: { tweet_parent: { delete: { id } } },
+    select: { id: true, tweet_parent: { where: { id } } },
   });
   return result;
 };
