@@ -140,28 +140,28 @@ describe.only('tweet service', () => {
     });
   });
 
-  describe('delete related tweet child and tweet photos', () => {
+  describe.only('delete related tweet child and tweet photos', () => {
     let tweetParent;
+    let user;
 
     before(async () => {
-      const { userProfileId } = await registerNewUser();
+      user = await registerNewUser();
       const option = tweetSaveValidation(
         ['tweet parent', 'tweet child'],
         null,
-        userProfileId,
+        user.userProfileId,
       );
       tweetParent = await createTweet(option);
     });
     it('should delete all related tweet', async () => {
       const result = await deleteRelatedTweetChildAndTweetPhotos(
+        user.userProfileId,
         tweetParent.id,
       );
 
-      expect(result).to.have.property('id');
-      expect(result).to.have.property('tweet');
-      expect(result).to.have.property('createdAt');
-      expect(result).to.have.property('updatedAt');
-      expect(result).to.have.property('authorId');
+      expect(result.id).to.be.equal(user.userProfileId);
+      expect(result.tweet_parent[0].tweet_child).to.be.deep.equal([]);
+      expect(result.tweet_parent[0].tweet_photos).to.be.deep.equal([]);
     });
   });
 });
