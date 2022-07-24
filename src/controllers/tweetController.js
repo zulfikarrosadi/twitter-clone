@@ -137,7 +137,7 @@ const getSingleTweet = async (req, res) => {
 
 const deleteTweet = async (req, res) => {
   const id = parseInt(req.params.idParent, 10);
-
+  const { userProfileId } = req.user;
   try {
     const photoFileNames = await getPhotofilename(id);
     if (photoFileNames.length) {
@@ -145,8 +145,8 @@ const deleteTweet = async (req, res) => {
       deleteMultipleFiles(fileName);
     }
 
-    await deleteRelatedTweetChildAndTweetPhotos(id);
-    await deleteTweetParentById(id);
+    await deleteRelatedTweetChildAndTweetPhotos(userProfileId, id);
+    await deleteTweetParentById(userProfileId, id);
 
     return res.status(204).send('deleted');
   } catch (error) {
