@@ -17,7 +17,7 @@ const {
 } = require('../src/utils/tweetUtils');
 const { tweets, registerNewUser, clearTestDatabase } = require('./helper');
 
-describe('tweet service', () => {
+describe.only('tweet service', () => {
   let userSettings;
   let userProfile;
   beforeEach(async () => {
@@ -119,19 +119,24 @@ describe('tweet service', () => {
 
   describe('delete the parent tweet', () => {
     let tweetParent;
+    let user;
     before(async () => {
-      const { userProfileId } = await registerNewUser();
-      const option = tweetSaveValidation(['tweet parent'], null, userProfileId);
+      user = await registerNewUser();
+      const option = tweetSaveValidation(
+        ['tweet parent'],
+        null,
+        user.userProfileId,
+      );
       tweetParent = await createTweet(option);
     });
     it('should delete the tweet parent', async () => {
-      const result = await deleteTweetParentById(tweetParent.id);
+      const result = await deleteTweetParentById(
+        user.userProfileId,
+        tweetParent.id,
+      );
 
-      expect(result).to.have.property('id');
-      expect(result).to.have.property('tweet');
-      expect(result).to.have.property('createdAt');
-      expect(result).to.have.property('updatedAt');
-      expect(result).to.have.property('authorId');
+      expect(result.id).to.be.equal(user.userProfileId);
+      expect(result.tweet_parent).to.be.deep.equal([]);
     });
   });
 
