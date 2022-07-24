@@ -19,13 +19,13 @@ const deserializeUser = async (req, res, next) => {
 
   if (!refreshToken) return next();
   const { payload: refreshPayload } = verifyJwt(refreshToken);
-
   if (!refreshPayload) return next();
+
   const isRefreshTokenValid = await getRefreshToken(
     refreshPayload.refreshSessionId,
   );
-
   if (!isRefreshTokenValid) return next();
+
   const { accessToken: newAccessToken } = createToken(
     refreshPayload.userSettingId,
     refreshPayload.userProfileId,
