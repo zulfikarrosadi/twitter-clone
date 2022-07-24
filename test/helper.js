@@ -25,10 +25,9 @@ async function fakeUserSettingData() {
   const username = generateUsername('zulfikar');
   const email = `${username}@testing.com`;
   const password = await hashPassword('password');
-  const genderId = 1; // male
   const dateBirth = new Date();
 
-  return [username, email, password, genderId, dateBirth];
+  return [username, email, password, dateBirth];
 }
 
 function fakeUserProfileData() {
