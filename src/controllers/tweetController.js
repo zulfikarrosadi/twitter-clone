@@ -167,11 +167,11 @@ const updateTweet = async (req, res) => {
   const idChild = parseInt(req.params.idChild, 10) || null;
 
   const { tweet } = req.body;
-
+  const { userProfileId } = req.user;
   try {
     if (!tweet) throw new RequestError('Tweet cannot be empty', 400);
     const updateOptions = tweetUpdateValidation(id, idChild, tweet);
-    const result = await updateTweetById(updateOptions);
+    const result = await updateTweetById(userProfileId, updateOptions);
 
     const timelapse = getTimelapse(beforeTime);
 
