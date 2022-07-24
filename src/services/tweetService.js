@@ -71,8 +71,11 @@ const getInfiniteTweetsByCursor = async (cursor) => {
   return result;
 };
 
-const updateTweetById = async (data) => {
-  const result = await prisma.tweetParent.update(data);
+const updateTweetById = async (userProfileId, data) => {
+  const result = await prisma.user.update({
+    where: { id: userProfileId },
+    data: { tweet_parent: { update: data } },
+  });
   return result;
 };
 
