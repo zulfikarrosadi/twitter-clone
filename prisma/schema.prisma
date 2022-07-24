@@ -1,6 +1,5 @@
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"]
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -14,11 +13,12 @@ model tweetParent {
   createdAt     DateTime       @default(now()) @map("created_at") @db.Timestamp(6)
   updatedAt     DateTime?      @updatedAt @map("updated_at")
   authorId      Int
-  user          user           @relation(fields: [authorId], references: [id])
+  user          user           @relation(fields: [authorId], references: [id], onDelete: Cascade)
   tweet_child   tweetChild[]
   tweet_comment tweetComment[]
   tweet_photos  tweetPhoto[]
 
+  @@index([authorId], map: "tweet_parents_authorId_fkey")
   @@map("tweet_parents")
 }
 
@@ -28,6 +28,7 @@ model tweetChild {
   idTweetParent Int         @map("id_tweet_parent")
   tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
+  @@index([idTweetParent], map: "tweet_childs_id_tweet_parent_fkey")
   @@map("tweet_childs")
 }
 
@@ -38,6 +39,7 @@ model tweetPhoto {
   description   String?     @db.VarChar(255)
   tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
+  @@index([idTweetParent], map: "tweet_photos_id_tweet_parent_fkey")
   @@map("tweet_photos")
 }
 
@@ -47,9 +49,11 @@ model tweetComment {
   content       String      @db.VarChar(500)
   createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamp(6)
   authorId      Int
-  user          user        @relation(fields: [authorId], references: [id])
+  user          user        @relation(fields: [authorId], references: [id], onDelete: Cascade)
   tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
+  @@index([authorId], map: "tweet_comments_authorId_fkey")
+  @@index([idTweetParent], map: "tweet_comments_id_tweet_parent_fkey")
   @@map("tweet_comments")
 }
 
@@ -74,6 +78,7 @@ model user {
   tweet_comment tweetComment[]
   tweet_parent  tweetParent[]
 
+  @@index([userSettingId], map: "users_user_setting_id_fkey")
   @@map("users")
 }
 
@@ -82,10 +87,11 @@ model userSetting {
   username  String   @unique @db.VarChar(50)
   email     String   @unique @db.VarChar(150)
   password  String   @db.VarChar(255)
-  genderId  Int      @default(0) @map("gender_id")
+  genderId  Int?     @map("gender_id")
   dateBirth DateTime @default(now()) @map("date_birth") @db.Timestamp(6)
-  genders   gender   @relation(fields: [genderId], references: [id])
+  genders   gender?  @relation(fields: [genderId], references: [id])
   user      user[]
 
+  @@index([genderId], map: "user_settings_gender_id_fkey")
   @@map("user_settings")
 }
