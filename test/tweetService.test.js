@@ -72,9 +72,10 @@ describe('tweet service', () => {
   describe('update the tweet', () => {
     let createNewTweet;
     let createdTweet;
+    let user;
     beforeEach(async () => {
-      const { userProfileId } = await registerNewUser();
-      const options = tweetSaveValidation(tweets, null, userProfileId);
+      user = await registerNewUser();
+      const options = tweetSaveValidation(tweets, null, user.userProfileId);
       createNewTweet = await createTweet(options);
       createdTweet = await getSingleTweetById(createNewTweet.id);
     });
@@ -86,7 +87,8 @@ describe('tweet service', () => {
           null,
           'update the tweet parent',
         );
-        const result = await updateTweetById(updateOption);
+        await updateTweetById(user.userProfileId, updateOption);
+        const result = await getSingleTweetById(createNewTweet.id);
 
         expect(result.id).to.be.equal(createNewTweet.id);
         expect(result.tweet).to.be.not.equal(createNewTweet.tweet);
@@ -102,7 +104,7 @@ describe('tweet service', () => {
           'updated tweet child',
         );
 
-        await updateTweetById(options);
+        await updateTweetById(user.userProfileId, options);
         const updatedTweet = await getSingleTweetById(createNewTweet.id);
 
         expect(updatedTweet.tweet_child[0].id).to.be.equal(
