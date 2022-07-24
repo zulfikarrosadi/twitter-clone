@@ -90,12 +90,25 @@ const getPhotofilename = async (id) => {
   return result;
 };
 
-const deleteRelatedTweetChildAndTweetPhotos = async (id) => {
-  const result = await prisma.tweetParent.update({
-    where: { id },
+const deleteRelatedTweetChildAndTweetPhotos = async (userProfileId, id) => {
+  const result = await prisma.user.update({
+    where: { id: userProfileId },
     data: {
-      tweet_child: { deleteMany: { idTweetParent: id } },
-      tweet_photos: { deleteMany: { idTweetParent: id } },
+      tweet_parent: {
+        update: {
+          where: { id },
+          data: {
+            tweet_child: { deleteMany: { idTweetParent: id } },
+            tweet_photos: { deleteMany: { idTweetParent: id } },
+          },
+        },
+      },
+    },
+    select: {
+      id: true,
+      tweet_parent: {
+        include: { tweet_child: true, tweet_photos: true },
+      },
     },
   });
   return result;
