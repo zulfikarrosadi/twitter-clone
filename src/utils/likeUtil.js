@@ -9,4 +9,15 @@ const validateCreateLikeSchema = (
   return option;
 };
 
-module.exports = { validateCreateLikeSchema };
+const validateGetLikeSchema = (tweetParentId, tweetChildId) => {
+  const option = {};
+
+  if (tweetParentId) option.where = { tweetParentId };
+  if (tweetChildId) {
+    option.where = { tweetChildId };
+    delete option.where.tweetParentId;
+  }
+  return option;
+};
+
+module.exports = { validateCreateLikeSchema, validateGetLikeSchema };
