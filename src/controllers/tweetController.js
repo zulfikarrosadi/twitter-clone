@@ -145,17 +145,24 @@ const deleteTweet = async (req, res) => {
       deleteMultipleFiles(fileName);
     }
 
-    await deleteRelatedTweetChildAndTweetPhotos(userProfileId, id);
+    const result = await deleteRelatedTweetChildAndTweetPhotos(
+      userProfileId,
+      id,
+    );
+    if (result.code && result.code === 'P2016') {
+      throw new RequestError('Somethings wrong', 400);
+    }
+
     await deleteTweetParentById(userProfileId, id);
 
     return res.status(204).send('deleted');
   } catch (error) {
     console.log(error);
-    return res.status(404).json({
+    return res.status(error.code || 404).json({
       timelapse: null,
       curosr: null,
       tweets: null,
-      error: errorHanlder('Tweet not found'),
+      error: error.message || errorHanlder('Tweet not found'),
     });
   }
 };
@@ -172,6 +179,10 @@ const updateTweet = async (req, res) => {
     if (!tweet) throw new RequestError('Tweet cannot be empty', 400);
     const updateOptions = tweetUpdateValidation(id, idChild, tweet);
     const result = await updateTweetById(userProfileId, updateOptions);
+
+    if (result.code === 'P2016') {
+      throw new RequestError('Somethings wrong', 400);
+    }
 
     const timelapse = getTimelapse(beforeTime);
 
