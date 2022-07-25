@@ -72,11 +72,15 @@ const getInfiniteTweetsByCursor = async (cursor) => {
 };
 
 const updateTweetById = async (userProfileId, data) => {
-  const result = await prisma.user.update({
-    where: { id: userProfileId },
-    data: { tweet_parent: { update: data } },
-  });
-  return result;
+  try {
+    const result = await prisma.user.update({
+      where: { id: userProfileId },
+      data: { tweet_parent: { update: data } },
+    });
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
 const getPhotofilename = async (id) => {
@@ -91,27 +95,31 @@ const getPhotofilename = async (id) => {
 };
 
 const deleteRelatedTweetChildAndTweetPhotos = async (userProfileId, id) => {
-  const result = await prisma.user.update({
-    where: { id: userProfileId },
-    data: {
-      tweet_parent: {
-        update: {
-          where: { id },
-          data: {
-            tweet_child: { deleteMany: { idTweetParent: id } },
-            tweet_photos: { deleteMany: { idTweetParent: id } },
+  try {
+    const result = await prisma.user.update({
+      where: { id: userProfileId },
+      data: {
+        tweet_parent: {
+          update: {
+            where: { id },
+            data: {
+              tweet_child: { deleteMany: { idTweetParent: id } },
+              tweet_photos: { deleteMany: { idTweetParent: id } },
+            },
           },
         },
       },
-    },
-    select: {
-      id: true,
-      tweet_parent: {
-        include: { tweet_child: true, tweet_photos: true },
+      select: {
+        id: true,
+        tweet_parent: {
+          include: { tweet_child: true, tweet_photos: true },
+        },
       },
-    },
-  });
-  return result;
+    });
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
 const deleteTweetParentById = async (userProfileId, id) => {
