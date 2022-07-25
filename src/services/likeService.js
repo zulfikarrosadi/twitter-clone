@@ -7,4 +7,9 @@ const addLike = async (data) => {
   return result;
 };
 
-module.exports = { addLike };
+const getLike = async (data) => {
+  const result = await prisma.like.count(data);
+  return result;
+};
+
+module.exports = { addLike, getLike };
