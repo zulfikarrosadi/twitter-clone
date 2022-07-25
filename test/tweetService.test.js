@@ -17,7 +17,7 @@ const {
 } = require('../src/utils/tweetUtils');
 const { tweets, registerNewUser, clearTestDatabase } = require('./helper');
 
-describe.only('tweet service', () => {
+describe('tweet service', () => {
   let userSettings;
   let userProfile;
   beforeEach(async () => {
@@ -140,7 +140,7 @@ describe.only('tweet service', () => {
     });
   });
 
-  describe.only('delete related tweet child and tweet photos', () => {
+  describe('delete related tweet child and tweet photos', () => {
     let tweetParent;
     let user;
 
