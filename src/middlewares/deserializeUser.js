@@ -1,3 +1,4 @@
+const { decode } = require('jsonwebtoken');
 const { getRefreshToken } = require('../services/redisService');
 const { createToken, verifyJwt } = require('../utils/jwtUtil');
 const { generateSessionId } = require('../utils/sessionUtil');
@@ -33,7 +34,7 @@ const deserializeUser = async (req, res, next) => {
   );
 
   res.cookie('accessToken', newAccessToken, { httpOnly: true });
-  req.user = verifyJwt(newAccessToken).payload;
+  req.user = decode(newAccessToken);
 
   return next();
 };
