@@ -18,6 +18,8 @@ model tweetParent {
   tweet_comment tweetComment[]
   tweet_photos  tweetPhoto[]
 
+  like    like[]
+  retweet retweet[]
   @@index([authorId], map: "tweet_parents_authorId_fkey")
   @@map("tweet_parents")
 }
@@ -28,6 +30,8 @@ model tweetChild {
   idTweetParent Int         @map("id_tweet_parent")
   tweet_parent  tweetParent @relation(fields: [idTweetParent], references: [id])
 
+  like    like[]
+  retweet retweet[]
   @@index([idTweetParent], map: "tweet_childs_id_tweet_parent_fkey")
   @@map("tweet_childs")
 }
@@ -57,6 +61,31 @@ model tweetComment {
   @@map("tweet_comments")
 }
 
+model like {
+  id            BigInt @id @default(autoincrement())
+  userProfileId Int    @map("user_id")
+  tweetParentId Int    @map("tweet_parent_id")
+  tweetChildId  Int?   @map("tweet_child_id")
+
+  user        user        @relation(fields: [userProfileId], references: [id])
+  tweetParent tweetParent @relation(fields: [tweetParentId], references: [id], onDelete: Cascade)
+  tweetChild  tweetChild? @relation(fields: [tweetChildId], references: [id], onDelete: Cascade)
+  @@map("likes")
+}
+
+model retweet {
+  id BigInt @id @default(autoincrement())
+
+  userId        Int
+  tweetParentId Int
+  tweetChildId  Int?
+
+  user        user        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tweetParent tweetParent @relation(fields: [tweetParentId], references: [id], onDelete: Cascade)
+  tweetChild  tweetChild? @relation(fields: [tweetChildId], references: [id], onDelete: Cascade)
+  @@map("retweets")
+}
+
 model gender {
   id            Int           @id @default(autoincrement())
   name          String
@@ -78,6 +107,8 @@ model user {
   tweet_comment tweetComment[]
   tweet_parent  tweetParent[]
 
+  like    like[]
+  retweet retweet[]
   @@index([userSettingId], map: "users_user_setting_id_fkey")
   @@map("users")
 }
