@@ -2,6 +2,12 @@ Priorities:
   33, 22
 
 Immedietly fix:
+  - user should have ability to login using username / email
+    - check the twitter behaviour first
+      - try to input not valid email (twitter should known that input as username )
+    - no need to use validator, in controller verify if user input is wether email or
+      username
+  - user should can only like the tweet just once
   - log out user when update the password
   - add logging system
   - changed the service, cause the schema is changed
