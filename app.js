@@ -5,6 +5,7 @@ const tweetRoutes = require('./src/routes/tweetRoute');
 const commentRoutes = require('./src/routes/commentRoute');
 const userRoutes = require('./src/routes/userRoute');
 const authRoute = require('./src/routes/authRoute');
+const likeRoute = require('./src/routes/likeRoute');
 const { deserializeUser } = require('./src/middlewares/deserializeUser');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(cookieParser());
 app.use(deserializeUser);
 
 app.use('/tweets', tweetRoutes);
+app.use('/tweets/likes', likeRoute);
 app.use('/tweets/comments', commentRoutes);
 app.use('/users', userRoutes);
 app.use('/', authRoute);
