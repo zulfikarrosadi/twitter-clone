@@ -44,6 +44,7 @@ const getAllTweets = async () => {
         select: { id: true, content: true },
         take: 2,
       },
+      _count: { select: { like: true, retweet: true, tweet_comment: true } },
     },
   });
   return result;
