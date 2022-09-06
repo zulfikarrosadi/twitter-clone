@@ -10,6 +10,28 @@
 			"item": [
 				{
 					"name": "Register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const randomEmail = `email.testing${Math.random() * 1000}@example.com`",
+									"pm.collectionVariables.set('email', randomEmail)"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const {user} = pm.response.json();",
+									"pm.collectionVariables.set('username', user.username)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -18,7 +40,7 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "{{$randomExampleEmail}}",
+									"value": "{{email}}",
 									"type": "default"
 								},
 								{
@@ -35,6 +57,12 @@
 									"key": "dateOfBirth",
 									"value": "{{$isoTimestamp}}",
 									"type": "default"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "default",
+									"disabled": true
 								}
 							]
 						},
@@ -59,8 +87,8 @@
 							"mode": "formdata",
 							"formdata": [
 								{
-									"key": "email",
-									"value": "Cristina_Brekke68@example.net",
+									"key": "userIdentifier",
+									"value": "tesoko",
 									"type": "default"
 								},
 								{
@@ -102,124 +130,68 @@
 			]
 		},
 		{
-			"name": "User Account",
-			"item": [
-				{
-					"name": "Update User Password",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "newPassword",
-									"value": "my new password",
-									"type": "default"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/users/settings/password",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"users",
-								"settings",
-								"password"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User Profile",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "name",
-									"value": "myNewName",
-									"type": "default"
-								},
-								{
-									"key": "bio",
-									"value": "",
-									"type": "default"
-								},
-								{
-									"key": "website",
-									"value": "",
-									"type": "default"
-								},
-								{
-									"key": "avatar",
-									"type": "file",
-									"src": "/home/zulfikar/Pictures/Color Hunt Palette 177749.png"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/users/profile",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"users",
-								"profile"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update User Setting",
-					"request": {
-						"method": "PATCH",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "username",
-									"value": "myUsernames",
-									"type": "default"
-								},
-								{
-									"key": "dateOfBirth",
-									"value": "{{$isoTimestamp}}",
-									"type": "default"
-								},
-								{
-									"key": "genderId",
-									"value": "1",
-									"type": "default"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{host}}/users/settings/information",
-							"host": [
-								"{{host}}"
-							],
-							"path": [
-								"users",
-								"settings",
-								"information"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Tweet",
 			"item": [
+				{
+					"name": "Like",
+					"item": [
+						{
+							"name": "Like Parent Tweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/tweets/likes/:tweetParentId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"tweets",
+										"likes",
+										":tweetParentId"
+									],
+									"variable": [
+										{
+											"key": "tweetParentId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Like Child Tweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/tweets/likes/:tweetParentId/:tweetChildId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"tweets",
+										"likes",
+										":tweetParentId",
+										":tweetChildId"
+									],
+									"variable": [
+										{
+											"key": "tweetParentId",
+											"value": ""
+										},
+										{
+											"key": "tweetChildId",
+											"value": ""
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
 				{
 					"name": "All Tweets",
 					"request": {
@@ -382,6 +354,122 @@
 			]
 		},
 		{
+			"name": "User Account",
+			"item": [
+				{
+					"name": "Update User Password",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "newPassword",
+									"value": "my new password",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/settings/password",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"settings",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Profile",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "myNewName",
+									"type": "default"
+								},
+								{
+									"key": "bio",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "website",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/home/zulfikar/Pictures/Color Hunt Palette 177749.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Setting",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "myUsernames",
+									"type": "default"
+								},
+								{
+									"key": "dateOfBirth",
+									"value": "{{$isoTimestamp}}",
+									"type": "default"
+								},
+								{
+									"key": "genderId",
+									"value": "1",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/users/settings/information",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"settings",
+								"information"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Comment",
 			"item": [
 				{
@@ -491,6 +579,16 @@
 		{
 			"key": "newPassword",
 			"value": "new password",
+			"type": "default"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "email",
+			"value": "",
 			"type": "default"
 		}
 	]
