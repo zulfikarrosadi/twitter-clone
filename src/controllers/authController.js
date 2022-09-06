@@ -1,7 +1,6 @@
 const { generateUsername } = require('../utils/generateUsername');
 const getTimelapse = require('../utils/timeUtil');
 const { RequestError } = require('../errors/RequestError');
-const { deleteRefreshToken } = require('../services/redisService');
 const { uniqueConstraintErrorHandler } = require('../utils/userErrorHandler');
 const { createSession } = require('../utils/sessionUtil');
 const {
