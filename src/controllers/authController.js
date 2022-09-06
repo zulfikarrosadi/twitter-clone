@@ -35,6 +35,7 @@ const addUser = async (req, res) => {
 
     return res.status(201).json({
       timelapse: `${timelapse} ms`,
+      user: { id: userSettings.id, username: userSettings.username },
       error: null,
     });
   } catch (error) {
