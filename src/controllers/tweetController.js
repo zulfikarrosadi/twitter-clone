@@ -180,6 +180,7 @@ const updateTweet = async (req, res) => {
     const updateOptions = tweetUpdateValidation(id, idChild, tweet);
     const result = await updateTweetById(userProfileId, updateOptions);
 
+    // if user try to update other person tweet
     if (result.code === 'P2016') {
       throw new RequestError('Somethings wrong', 400);
     }
