@@ -49,13 +49,22 @@ const addUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const beforeTime = new Date().getTime();
-  const { email, password } = req.body;
+  const { userIdentifier, password } = req.body;
+
+  const userQuery = {};
+
+  if (userIdentifier.includes('@')) {
+    userQuery.email = userIdentifier;
+  } else {
+    userQuery.username = userIdentifier;
+  }
+
   try {
     const {
       password: hashedPassword,
       user: userProfileId,
       id: userSettingId,
-    } = await getUserSettingsService(email);
+    } = await getUserSettingsService(userQuery);
 
     const isVerified = await verifyPassword(password, hashedPassword);
     if (!isVerified) {
