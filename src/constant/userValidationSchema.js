@@ -1,6 +1,6 @@
 const { body } = require('express-validator');
 
-const userValidationSchema = [
+const userRegistrationValidationSchema = [
   body('email').isEmail().withMessage('Please enter valid email'),
   body('password')
     .isLength({ min: 6 })
@@ -18,8 +18,12 @@ const userValidationSchema = [
 ];
 
 const userLoginValidationSchema = [
-  userValidationSchema[0],
-  userValidationSchema[1],
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password should have minimum 6 chars length'),
 ];
 
-module.exports = { userValidationSchema, userLoginValidationSchema };
+module.exports = {
+  userRegistrationValidationSchema,
+  userLoginValidationSchema,
+};

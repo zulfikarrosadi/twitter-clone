@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const formData = require('express-form-data');
 const {
-  userValidationSchema,
+  userRegistrationValidationSchema,
   userLoginValidationSchema,
 } = require('../constant/userValidationSchema');
 const {
@@ -15,7 +15,11 @@ const router = Router();
 
 router.use(formData.parse());
 
-router.post('/register', validateUser(userValidationSchema), addUser);
+router.post(
+  '/register',
+  validateUser(userRegistrationValidationSchema),
+  addUser,
+);
 router.post('/login', validateUser(userLoginValidationSchema), loginUser);
 router.post('/logout', logOutUser);
 
