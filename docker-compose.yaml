@@ -16,4 +16,4 @@ services:
     ports:
       - 3307:3306
     volumes:
-      - /home/zulfikar/Projects/mysql-server-docker/conf.d/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf:ro
